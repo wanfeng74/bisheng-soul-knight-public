@@ -1,0 +1,41 @@
+{
+  "name": "笔上元气骑士",
+  "appid": "8001865309001001",
+  "version": "1.4.2",
+  "description": "笔上元气骑士 — 有道词典笔上的 2D 像素地牢射击（元气骑士同人练习作）",
+  "icon": "icon.png",
+  "quickjs": {
+    "version": "20200705",
+    "bigNum": false
+  },
+  "single-js-bundle": true,
+  "scripts": {
+    "build": "aiot-cli -p",
+    "build:dev": "aiot-cli",
+    "build:simulator": "aiot-cli simulator",
+    "preview": "aiot-cli preview",
+    "package": "aiot-cli -c -q -p",
+    "gen:version": "node ../scripts/gen-ui-version.mjs --target rk",
+    "stage:rk": "node ../scripts/stage-libs.mjs --target rk",
+    "build:prod": "node ../scripts/gen-ui-version.mjs --target rk && aiot-cli -c -q -p",
+    "test": "node --import ./scripts/test-loader.mjs scripts/run-all.mjs"
+  },
+  "keywords": [
+    "iot",
+    "miniapp",
+    "game",
+    "soulknight",
+    "roguelike",
+    "pixel"
+  ],
+  "devDependencies": {
+    "aiot-vue-cli": "^1.0.32",
+    "css-loader": "0.28.11",
+    "less-loader": "5.0.0",
+    "style-loader": "0.23.1"
+  },
+  "dependencies": {
+    "falcon-ui": "^2.0.2"
+  },
+  "packageManager": "pnpm@10.12.4"
+}

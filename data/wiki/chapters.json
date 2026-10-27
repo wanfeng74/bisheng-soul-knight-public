@@ -1,0 +1,49 @@
+{
+  "source": "https://yqqs.huijiwiki.com/wiki/关卡模式",
+  "floorsPerChapter": 5,
+  "victoryFloor": 15,
+  "extensionFinalFloor": 20,
+  "chapters": [
+    {
+      "id": 1,
+      "name": "第一大关",
+      "scenes": [
+        { "id": "ice", "name": "冰原" },
+        { "id": "forest", "name": "森林" },
+        { "id": "ruins", "name": "遗迹" },
+        { "id": "mech_ruins", "name": "机械遗迹" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "第二大关",
+      "scenes": [
+        { "id": "cave", "name": "溶洞" },
+        { "id": "swamp", "name": "沼泽" },
+        { "id": "tomb", "name": "墓穴" },
+        { "id": "castle", "name": "城堡" },
+        { "id": "underground_castle", "name": "地下城堡" },
+        { "id": "witch_forest", "name": "女巫森林" },
+        { "id": "odd_city", "name": "奇械城" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "第三大关",
+      "scenes": [
+        { "id": "volcano", "name": "火山" },
+        { "id": "alien_base", "name": "外星基地" },
+        { "id": "mud_island", "name": "泥油海岛" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "第四大关",
+      "scenes": [
+        { "id": "stone_ruins", "name": "巨石山脉遗迹" },
+        { "id": "ancient_battlefield", "name": "古战场" },
+        { "id": "seabed", "name": "海底" }
+      ]
+    }
+  ]
+}

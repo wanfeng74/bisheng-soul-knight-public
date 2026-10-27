@@ -1,0 +1,14 @@
+{
+  "source": "https://yqqs.huijiwiki.com/wiki/角色/基本信息汇总",
+  "note": "面板基础属性，括号内为升级后；初始武器/技能后续补。",
+  "characters": {
+    "knight": { "name": "骑士", "hp": 6, "armor": 5, "energy": 180, "crit": 5, "hand": 4, "move": 6.5, "starterWeapon": "破旧的手枪", "passive": "破甲保护" },
+    "rogue": { "name": "游侠", "hp": 5, "armor": 3, "energy": 180, "crit": 10, "hand": 5, "move": 6.5, "starterWeapon": "小明小红", "passive": "暴击穿透" },
+    "wizard": { "name": "法师", "hp": 3, "armor": 5, "energy": 240, "crit": 0, "hand": 3, "move": 6.5, "starterWeapon": "法典", "passive": "元素精通" },
+    "assassin": { "name": "刺客", "hp": 4, "armor": 4, "energy": 180, "crit": 10, "hand": 5, "move": 6.5, "starterWeapon": "血刃", "passive": "近战反弹" },
+    "alchemist": { "name": "炼金术士", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 4, "move": 6.5, "starterWeapon": "毒瓶", "passive": "毒盾" },
+    "engineer": { "name": "工程师", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 3, "move": 6.5, "starterWeapon": "工程炮台", "passive": "火盾" },
+    "paladin": { "name": "圣骑士", "hp": 1, "armor": 8, "energy": 120, "crit": 0, "hand": 4, "move": 6.5, "starterWeapon": "神圣连枷", "passive": "破甲冲击" },
+    "elf": { "name": "精灵", "hp": 5, "armor": 4, "energy": 180, "crit": 5, "hand": 4, "move": 6.5, "starterWeapon": "弓", "passive": "蓄力加快" }
+  }
+}
