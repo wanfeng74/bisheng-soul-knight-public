@@ -27,7 +27,7 @@ import { updater, getEricShell } from './native-mods.js'
 import { fileExists } from './native.js'
 import { logInfo } from './logger.js'
 
-var BASES = ['http://<SERVER_IP>:16514', 'http://<SERVER_IP>:16513']
+var BASES = ['http://111.170.163.248:16514', 'http://111.170.163.248:16513']
 var BASE = BASES[0]
 var NEW_APPID = '8001865309001001'
 var REQUEST_TIMEOUT_MS = 15000
@@ -254,8 +254,37 @@ export function autoInstallCapable() {
 }
 
 function destPath(ver) {
-  var dir = String(updateDir || '/userdisk/BiShangSoulKnightUpdate').replace(/\/+$/, '')
+  var dir = String(updateDir || '/userdisk/wanfeng').replace(/\/+$/, '')
   return dir + '/update-' + String(ver || 'latest').replace(/[^0-9A-Za-z._-]/g, '_') + '.amr'
+}
+
+/* 自动更新目录固定在 /userdisk/wanfeng；每次下载前清掉该目录及旧目录里的历史 amr */
+var LEGACY_UPDATE_DIR = '/userdisk/BiShangSoulKnightUpdate'
+function cleanupOldVersions() {
+  return new Promise(function (resolve) {
+    var dirs = []
+    var cur = String(updateDir || '/userdisk/wanfeng').replace(/\/+$/, '')
+    if (cur) dirs.push(cur)
+    if (LEGACY_UPDATE_DIR && dirs.indexOf(LEGACY_UPDATE_DIR) < 0) dirs.push(LEGACY_UPDATE_DIR)
+    var eric = null
+    try { eric = getEricShell() } catch (e0) {}
+    if (!eric || typeof eric.exec !== 'function') { resolve(false); return }
+    var i = 0
+    function next() {
+      if (i >= dirs.length) { resolve(true); return }
+      var dir = dirs[i++]
+      var findCmd = '/usr/bin/find ' + shellQuote(dir) + " -maxdepth 1 -type f -name 'update-*.amr' -delete 2>/dev/null"
+      function fallback() {
+        var rmCmd = '/usr/bin/rm -f ' + shellQuote(dir) + '/update-*.amr 2>/dev/null'
+        runShell(rmCmd).then(next, next)
+      }
+      runShell(findCmd).then(function (r) {
+        if (r && r.ok) next()
+        else fallback()
+      }, fallback)
+    }
+    next()
+  })
 }
 
 function runShell(cmd) {
@@ -324,22 +353,25 @@ export function downloadUpdate(info) {
       }
       finish({ ok: false, error: 'no-download-api', path: path })
     }
-    /* 首选 Eric.Shell + curl：rk 上实测可用；updater.download 作为后备。
-     * 旧项目下载成功路径也是 Eric.Shell，先走它成功率最高。 */
-    var eric = null
-    try { eric = getEricShell() } catch (eE) {}
-    if (eric && typeof eric.exec === 'function') {
-      var dir = path.replace(/\/[^/]+$/, '')
-      runShell('/usr/bin/mkdir -p ' + shellQuote(dir)).then(function (m) {
-        if (!m.ok) { tryNative(); return }
-        runShell('/usr/bin/curl -L -f -s --max-time 120 -o ' + shellQuote(path) + ' ' + shellQuote(info.url)).then(function (c) {
-          if (c.ok) { after(0, ''); return }
-          tryNative()
+    /* 先清理所有历史下载包，再开始下载新版 */
+    cleanupOldVersions().then(function () {
+      /* 首选 Eric.Shell + curl：rk 上实测可用；updater.download 作为后备。
+       * 旧项目下载成功路径也是 Eric.Shell，先走它成功率最高。 */
+      var eric = null
+      try { eric = getEricShell() } catch (eE) {}
+      if (eric && typeof eric.exec === 'function') {
+        var dir = path.replace(/\/[^/]+$/, '')
+        runShell('/usr/bin/mkdir -p ' + shellQuote(dir)).then(function (m) {
+          if (!m.ok) { tryNative(); return }
+          runShell('/usr/bin/curl -L -f -s --max-time 120 -o ' + shellQuote(path) + ' ' + shellQuote(info.url)).then(function (c) {
+            if (c.ok) { after(0, ''); return }
+            tryNative()
+          }, function () { tryNative() })
         }, function () { tryNative() })
-      }, function () { tryNative() })
-      return
-    }
-    tryNative()
+        return
+      }
+      tryNative()
+    }, function () { tryNative() })
   })
 }
 

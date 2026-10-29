@@ -9,7 +9,7 @@
  *  - sprite 命名：普通敌人 enemy_<id>，Boss boss_<id>（与美术契约 5.5 节一致）。
  *  - 本文件只依赖同目录 constants.js / rng.js，保持 ES5 语法以适配 QuickJS。
  */
-import { CHAPTERS, FLOOR_COUNT, FINAL_BOSS, WIKI_CHAPTER1, WIKI_CHAPTER2, WIKI_CHAPTER3, WIKI_CHAPTER4 } from './constants.js'
+import { CHAPTERS, FLOOR_COUNT, FINAL_BOSS, WIKI_CHAPTER1, WIKI_CHAPTER2, WIKI_CHAPTER3, WIKI_CHAPTER4, WIKI_MONSTER_HP, WIKI_BOSS_PHASE } from './constants.js'
 import { rint, weighted } from './rng.js'
 
 /* ================= 普通敌人（18 种） ================= */
@@ -445,42 +445,205 @@ export var WIKI_BOSSES = {}
   var gp = WIKI_BOSSES.goblin_priest
   if (gp) {
     gp.patterns = {
-      radial: { cd: 3.0, count: 6, speed: 150, dmg: 3, radius: 7 },
+      meteor: { cd: 4.6, count: 3, dmg: 4, element: 'fire' },
+      radial: { cd: 3.0, count: 8, speed: 150, dmg: 3, radius: 7 },
       aimed: { cd: 2.2, count: 3, speed: 210, dmg: 3, spread: 0.22 },
-      summon: { cd: 6.0, mob: 'goblin_guard', count: 2 },
-      charge: { cd: 4.0, telegraph: 0.6, speed: 260, dmg: 3 }
+      summon: { cd: 6.0, mob: 'goblin_guard', count: 2 }
     }
-    gp.routine = [['radial', 'aimed'], ['summon', 'charge', 'radial']]
+    gp.routine = [['meteor', 'radial'], ['summon', 'aimed', 'meteor']]
   }
   var sk = WIKI_BOSSES.snowman_king
   if (sk) {
     sk.patterns = {
+      meteor: { cd: 4.2, count: 4, dmg: 2, element: 'ice' },
       radial: { cd: 2.8, count: 10, speed: 130, dmg: 2, radius: 6, element: 'ice' },
       aimed: { cd: 1.8, count: 4, speed: 210, dmg: 3, spread: 0.3, element: 'ice' },
-      summon: { cd: 6.0, mob: 'small_snow_ape', count: 1 },
-      charge: { cd: 4.2, telegraph: 0.65, speed: 260, dmg: 3 }
+      summon: { cd: 6.0, mob: 'small_snow_ape', count: 1 }
     }
-    sk.routine = [['radial', 'aimed'], ['summon', 'radial', 'aimed']]
+    sk.routine = [['radial', 'aimed'], ['summon', 'meteor', 'radial']]
   }
   var gmk = WIKI_BOSSES.golden_monkey_king
   if (gmk) {
     gmk.patterns = {
+      meteor: { cd: 4.0, count: 3, dmg: 3, element: 'poison' },
       radial: { cd: 2.6, count: 12, speed: 150, dmg: 2, radius: 7 },
       aimed: { cd: 1.8, count: 4, speed: 220, dmg: 2, spread: 0.25 },
-      summon: { cd: 6.0, mob: 'monkey', count: 2 },
-      charge: { cd: 3.8, telegraph: 0.55, speed: 280, dmg: 3 }
+      summon: { cd: 6.0, mob: 'monkey', count: 2 }
     }
-    gmk.routine = [['charge', 'aimed'], ['summon', 'radial', 'charge']]
+    gmk.routine = [['meteor', 'aimed'], ['summon', 'radial', 'meteor']]
   }
   var rz = WIKI_BOSSES.ruin_zulan
   if (rz) {
     rz.patterns = {
+      laser: { cd: 3.0, count: 3, speed: 420, dmg: 2, spread: 0.08, element: 'lightning' },
       radial: { cd: 2.2, count: 16, speed: 140, dmg: 2, radius: 6 },
       aimed: { cd: 1.5, count: 5, speed: 230, dmg: 2, spread: 0.26 },
-      summon: { cd: 5.5, mob: 'ruin_seeker', count: 2 },
-      charge: { cd: 3.6, telegraph: 0.55, speed: 300, dmg: 3 }
+      summon: { cd: 5.5, mob: 'ruin_seeker', count: 2 }
     }
-    rz.routine = [['radial', 'aimed'], ['summon', 'charge', 'radial']]
+    rz.routine = [['laser', 'aimed'], ['summon', 'radial', 'laser']]
+  }
+  /* 其余 Boss：按名称/元素做基础差异化，避免全部套 4 个基础模板 */
+  var _custom = { goblin_priest: 1, snowman_king: 1, golden_monkey_king: 1, ruin_zulan: 1 }
+  for (var _bid in WIKI_BOSSES) {
+    if (!Object.prototype.hasOwnProperty.call(WIKI_BOSSES, _bid)) continue
+    if (_custom[_bid]) continue
+    var _b = WIKI_BOSSES[_bid]
+    var _nm = _b.name || ''
+    var _el = ''
+    if (/冰|霜|雪/.test(_nm)) _el = 'ice'
+    else if (/火|熔|炎|沙|陨/.test(_nm)) _el = 'fire'
+    else if (/毒|巫|蛛|虫/.test(_nm)) _el = 'poison'
+    else if (/机械|激光|炮|电|机甲|浮游/.test(_nm)) _el = 'lightning'
+    var _heavy = /王|帝|龙|机甲|骑士|巨像|领主/.test(_nm)
+    var _count = _heavy ? 14 : 10
+    _b.patterns = {
+      radial: { cd: 2.8, count: _count, speed: 140, dmg: 2, radius: 6, element: _el },
+      aimed: { cd: 1.9, count: _heavy ? 5 : 3, speed: 215, dmg: 2, spread: 0.24, element: _el },
+      charge: { cd: 4.4, telegraph: 0.6, speed: 260, dmg: 2 }
+    }
+    if (_el === 'lightning') _b.patterns.laser = { cd: 3.2, count: 3, speed: 400, dmg: 2, spread: 0.08, element: 'lightning' }
+    if (_el === 'fire' || _heavy) _b.patterns.meteor = { cd: 4.4, count: 3, dmg: 3, element: _el || 'fire' }
+    _b.routine = [_b.patterns.laser ? ['laser', 'aimed'] : ['radial', 'aimed'], _b.patterns.meteor ? ['meteor', 'charge', 'aimed'] : ['charge', 'summon', 'radial']]
+    _b.phaseAt = [1.0, 0.6, 0.3]
+  }
+  var _ciw = WIKI_BOSSES.cave_ice_worm
+  if (_ciw) {
+    _ciw.patterns = { burrow: { cd: 4.5, dmg: 3 }, radial: { cd: 2.6, count: 10, speed: 135, dmg: 2, radius: 6, element: 'ice' }, summon: { cd: 6.0, mob: 'ice_worm_larva', count: 2 } }
+    _ciw.routine = [['burrow', 'radial'], ['summon', 'radial', 'burrow']]
+  }
+  var _tbk = WIKI_BOSSES.tomb_beetle_king
+  if (_tbk) {
+    _tbk.patterns = { shield: { cd: 7.0 }, charge: { cd: 4.0, telegraph: 0.6, speed: 280, dmg: 3 }, radial: { cd: 2.8, count: 12, speed: 145, dmg: 2, radius: 6 } }
+    _tbk.routine = [['charge', 'radial'], ['shield', 'charge', 'radial']]
+  }
+  var _bdl = WIKI_BOSSES.boundless_dark_lord
+  if (_bdl) {
+    _bdl.patterns = { summon: { cd: 6.5, mob: 'old_god_touch', count: 2 }, meteor: { cd: 4.0, count: 4, dmg: 2, element: 'poison' }, aimed: { cd: 1.8, count: 5, speed: 210, dmg: 2, spread: 0.3, element: 'poison' } }
+    _bdl.routine = [['meteor', 'aimed'], ['summon', 'meteor', 'aimed']]
+  }
+  var _mq = WIKI_BOSSES.mechanical_queen
+  if (_mq) {
+    _mq.patterns = { laser: { cd: 2.8, count: 4, speed: 430, dmg: 2, spread: 0.1, element: 'lightning' }, summon: { cd: 6.0, mob: 'knight_p', count: 2 }, aimed: { cd: 1.6, count: 5, speed: 230, dmg: 2, spread: 0.25 } }
+    _mq.routine = [['laser', 'aimed'], ['summon', 'laser', 'aimed']]
+  }
+  var _vc = WIKI_BOSSES.vc_mecha
+  if (_vc) {
+    _vc.patterns = { laser: { cd: 3.0, count: 3, speed: 420, dmg: 2, spread: 0.08, element: 'lightning' }, charge: { cd: 4.2, telegraph: 0.55, speed: 300, dmg: 3 }, aimed: { cd: 1.8, count: 4, speed: 220, dmg: 2, spread: 0.24 } }
+    _vc.routine = [['laser', 'charge'], ['laser', 'aimed', 'charge']]
+  }
+  var _gw = WIKI_BOSSES.great_wizard
+  if (_gw) {
+    _gw.patterns = { meteor: { cd: 3.8, count: 3, dmg: 3, element: 'fire' }, aimed: { cd: 1.7, count: 5, speed: 220, dmg: 2, spread: 0.28, element: 'fire' }, summon: { cd: 6.0, mob: 'castle_wizard', count: 1 } }
+    _gw.routine = [['meteor', 'aimed'], ['summon', 'meteor', 'aimed']]
+  }
+  var _vsw = WIKI_BOSSES.volcano_sandworm
+  if (_vsw) {
+    _vsw.patterns = { burrow: { cd: 4.2, dmg: 3 }, meteor: { cd: 3.8, count: 4, dmg: 3, element: 'fire' }, aimed: { cd: 1.8, count: 5, speed: 215, dmg: 2, spread: 0.28, element: 'fire' } }
+    _vsw.routine = [['burrow', 'meteor'], ['meteor', 'aimed', 'burrow']]
+  }
+  var _an = WIKI_BOSSES.anubis
+  if (_an) {
+    _an.patterns = { summon: { cd: 6.0, mob: 'mummy_wiki', count: 2 }, meteor: { cd: 4.0, count: 3, dmg: 3, element: 'poison' }, aimed: { cd: 1.8, count: 4, speed: 220, dmg: 2, spread: 0.26 } }
+    _an.routine = [['meteor', 'aimed'], ['summon', 'meteor', 'aimed']]
+  }
+  var _fdc = WIKI_BOSSES.flying_dragon_cub
+  if (_fdc) {
+    _fdc.patterns = { laser: { cd: 2.8, count: 3, speed: 410, dmg: 2, spread: 0.1, element: 'ice' }, aimed: { cd: 1.6, count: 5, speed: 225, dmg: 2, spread: 0.28, element: 'ice' }, summon: { cd: 6.0, mob: 'heat_bug', count: 2 } }
+    _fdc.routine = [['laser', 'aimed'], ['summon', 'laser', 'aimed']]
+  }
+  var _wl = WIKI_BOSSES.wacken_leader
+  if (_wl) {
+    _wl.patterns = { summon: { cd: 6.0, mob: 'alien', count: 2 }, laser: { cd: 3.0, count: 4, speed: 400, dmg: 2, spread: 0.12, element: 'lightning' }, aimed: { cd: 1.7, count: 5, speed: 220, dmg: 2, spread: 0.3 } }
+    _wl.routine = [['laser', 'aimed'], ['summon', 'laser', 'aimed']]
+  }
+  var _lu = WIKI_BOSSES.laser_ufo_boss
+  if (_lu) {
+    _lu.patterns = { laser: { cd: 2.6, count: 5, speed: 430, dmg: 2, spread: 0.16, element: 'lightning' }, aimed: { cd: 1.5, count: 4, speed: 230, dmg: 2, spread: 0.24 } }
+    _lu.routine = [['laser', 'aimed'], ['laser', 'laser', 'aimed']]
+  }
+  var _pk = WIKI_BOSSES.pirate_king
+  if (_pk) {
+    _pk.patterns = { meteor: { cd: 4.2, count: 4, dmg: 3, element: 'fire' }, summon: { cd: 6.0, mob: 'pirate_a', count: 2 }, charge: { cd: 4.0, telegraph: 0.55, speed: 280, dmg: 3 } }
+    _pk.routine = [['meteor', 'charge'], ['summon', 'meteor', 'charge']]
+  }
+  var _sw = WIKI_BOSSES.steel_wave_breaker
+  if (_sw) {
+    _sw.patterns = { laser: { cd: 2.8, count: 4, speed: 420, dmg: 2, spread: 0.12, element: 'lightning' }, charge: { cd: 4.2, telegraph: 0.6, speed: 300, dmg: 3 }, aimed: { cd: 1.7, count: 5, speed: 230, dmg: 2, spread: 0.26 } }
+    _sw.routine = [['laser', 'charge'], ['laser', 'aimed', 'charge']]
+  }
+  var _hx = WIKI_BOSSES.hua_xiong
+  if (_hx) {
+    _hx.patterns = { meteor: { cd: 3.8, count: 3, dmg: 3, element: 'fire' }, charge: { cd: 3.6, telegraph: 0.5, speed: 300, dmg: 3 }, aimed: { cd: 1.6, count: 4, speed: 225, dmg: 2, spread: 0.24 } }
+    _hx.routine = [['charge', 'aimed'], ['meteor', 'charge', 'aimed']]
+  }
+  var _dz = WIKI_BOSSES.dong_zhuo
+  if (_dz) {
+    _dz.patterns = { meteor: { cd: 3.6, count: 4, dmg: 3, element: 'fire' }, summon: { cd: 6.0, mob: 'spearman', count: 2 }, charge: { cd: 3.8, telegraph: 0.55, speed: 300, dmg: 3 } }
+    _dz.routine = [['meteor', 'charge'], ['summon', 'meteor', 'charge']]
+  }
+  var _ab = WIKI_BOSSES.abyss_navigator
+  if (_ab) {
+    _ab.patterns = { laser: { cd: 2.7, count: 4, speed: 430, dmg: 2, spread: 0.12, element: 'lightning' }, summon: { cd: 6.0, mob: 'kraken_servant', count: 2 }, aimed: { cd: 1.6, count: 5, speed: 230, dmg: 2, spread: 0.28 } }
+    _ab.routine = [['laser', 'aimed'], ['summon', 'laser', 'aimed']]
+  }
+  var _gk = WIKI_BOSSES.great_knight
+  if (_gk) {
+    _gk.patterns = { charge: { cd: 3.5, telegraph: 0.5, speed: 310, dmg: 3 }, aimed: { cd: 1.6, count: 5, speed: 230, dmg: 2, spread: 0.3 }, summon: { cd: 6.0, mob: 'castle_knight', count: 2 } }
+    _gk.routine = [['charge', 'aimed'], ['summon', 'charge', 'aimed']]
+  }
+  var _sk = WIKI_BOSSES.skeleton_king
+  if (_sk) {
+    _sk.patterns = { summon: { cd: 5.6, mob: 'skeleton_soldier', count: 3 }, meteor: { cd: 4.0, count: 3, dmg: 2, element: 'poison' }, aimed: { cd: 1.7, count: 5, speed: 220, dmg: 2, spread: 0.3 } }
+    _sk.routine = [['meteor', 'aimed'], ['summon', 'meteor', 'aimed']]
+  }
+  var _gkg = WIKI_BOSSES.ghost_king
+  if (_gkg) {
+    _gkg.patterns = { burrow: { cd: 4.2, dmg: 2 }, aimed: { cd: 1.5, count: 5, speed: 235, dmg: 2, spread: 0.28 }, summon: { cd: 6.0, mob: 'ghost', count: 2 } }
+    _gkg.routine = [['burrow', 'aimed'], ['summon', 'burrow', 'aimed']]
+  }
+  var _hk = WIKI_BOSSES.headless_knight
+  if (_hk) {
+    _hk.patterns = { charge: { cd: 3.6, telegraph: 0.5, speed: 320, dmg: 3 }, laser: { cd: 3.0, count: 3, speed: 410, dmg: 2, spread: 0.1 }, aimed: { cd: 1.7, count: 4, speed: 225, dmg: 2, spread: 0.26 } }
+    _hk.routine = [['charge', 'laser'], ['charge', 'aimed', 'laser']]
+  }
+  var _me = WIKI_BOSSES.mechanical_emperor
+  if (_me) {
+    _me.patterns = { laser: { cd: 2.6, count: 5, speed: 440, dmg: 2, spread: 0.16, element: 'lightning' }, aimed: { cd: 1.6, count: 5, speed: 230, dmg: 2, spread: 0.26 }, summon: { cd: 6.0, mob: 'knight_x', count: 2 }, meteor: { cd: 4.2, count: 3, dmg: 3, element: 'lightning' } }
+    _me.routine = [['laser', 'aimed'], ['summon', 'laser', 'meteor']]
+  }
+  var _cz = WIKI_BOSSES.colossus_zulan
+  if (_cz) {
+    _cz.patterns = { laser: { cd: 2.7, count: 4, speed: 420, dmg: 2, spread: 0.12, element: 'lightning' }, summon: { cd: 6.0, mob: 'alien', count: 2 }, aimed: { cd: 1.6, count: 5, speed: 230, dmg: 2, spread: 0.26 } }
+    _cz.routine = [['laser', 'aimed'], ['summon', 'laser', 'aimed']]
+  }
+  var _saa = WIKI_BOSSES.stone_ancestor_arm
+  if (_saa) {
+    _saa.patterns = { burrow: { cd: 4.4, dmg: 3 }, meteor: { cd: 4.2, count: 4, dmg: 3, element: 'fire' }, charge: { cd: 3.8, telegraph: 0.55, speed: 280, dmg: 3 } }
+    _saa.routine = [['burrow', 'meteor'], ['charge', 'meteor', 'burrow']]
+  }
+  var _sfd = WIKI_BOSSES.stone_fog_dragon
+  if (_sfd) {
+    _sfd.patterns = { laser: { cd: 2.8, count: 4, speed: 425, dmg: 2, spread: 0.12, element: 'lightning' }, meteor: { cd: 4.0, count: 3, dmg: 3, element: 'fire' }, aimed: { cd: 1.6, count: 5, speed: 230, dmg: 2, spread: 0.28 } }
+    _sfd.routine = [['laser', 'meteor'], ['laser', 'aimed', 'meteor']]
+  }
+  var _sa = WIKI_BOSSES.stone_ancestor
+  if (_sa) {
+    _sa.patterns = { shield: { cd: 7.0 }, meteor: { cd: 3.8, count: 5, dmg: 3, element: 'fire' }, laser: { cd: 2.9, count: 4, speed: 420, dmg: 2, spread: 0.12 } }
+    _sa.routine = [['meteor', 'laser'], ['shield', 'meteor', 'laser']]
+  }
+  var _lj = WIKI_BOSSES.li_jue
+  if (_lj) {
+    _lj.patterns = { charge: { cd: 3.4, telegraph: 0.5, speed: 310, dmg: 3 }, aimed: { cd: 1.6, count: 5, speed: 230, dmg: 2, spread: 0.3 }, summon: { cd: 6.0, mob: 'cavalry', count: 2 } }
+    _lj.routine = [['charge', 'aimed'], ['summon', 'charge', 'aimed']]
+  }
+  var _fw = WIKI_BOSSES.final_weapon_01
+  if (_fw) {
+    _fw.patterns = { laser: { cd: 2.5, count: 6, speed: 450, dmg: 2, spread: 0.18, element: 'lightning' }, meteor: { cd: 4.0, count: 4, dmg: 3, element: 'fire' }, charge: { cd: 3.6, telegraph: 0.5, speed: 320, dmg: 3 } }
+    _fw.routine = [['laser', 'meteor'], ['charge', 'laser', 'meteor']]
+  }
+  for (var _phid in WIKI_BOSS_PHASE) {
+    if (!Object.prototype.hasOwnProperty.call(WIKI_BOSS_PHASE, _phid)) continue
+    if (WIKI_BOSSES[_phid]) WIKI_BOSSES[_phid].phaseAt = WIKI_BOSS_PHASE[_phid].slice()
   }
 })()
 
@@ -549,6 +712,14 @@ export var WIKI_BOSSES = {}
   /* 维基正文明确给出的少数 HP */
   if (WIKI_ENEMIES.old_god_touch) WIKI_ENEMIES.old_god_touch.hp = 35
   if (WIKI_ENEMIES.tentacle_monster) WIKI_ENEMIES.tentacle_monster.hp = 22
+  for (var _hid in WIKI_MONSTER_HP) {
+    if (!Object.prototype.hasOwnProperty.call(WIKI_MONSTER_HP, _hid)) continue
+    var _ht = WIKI_ENEMIES[_hid] || WIKI_BOSSES[_hid] || ENEMIES[_hid] || BOSSES[_hid]
+    var _hd = WIKI_MONSTER_HP[_hid]
+    if (!_ht || !_hd) continue
+    if (typeof _hd.hp === 'number') _ht.hp = _hd.hp
+    if (typeof _hd.eliteHp === 'number') _ht.eliteHp = _hd.eliteHp
+  }
 })()
 
 /* ================= 查询接口 ================= */

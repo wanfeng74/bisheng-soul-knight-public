@@ -1,0 +1,240 @@
+{
+  "source": "https://yqqs.huijiwiki.com/wiki/角色/基本信息汇总",
+  "sourceApi": "https://yqqs.huijiwiki.com/api.php?action=parse&page=角色%2F基本信息汇总&prop=wikitext&format=json",
+  "fetchedAt": "2026-10-27",
+  "count": 42,
+  "fieldNotes": {
+    "unlock": "解锁条件。初始解锁写 \"0\"；宝石解锁写 \"N 宝石\"；人民币解锁写 \"¥N\"；特殊条件按 wiki 原文（机器人/警官/气宗/枭首者）。",
+    "hp/armor/energy/crit/hand/speed": "面板基础值，已忽略 wiki 括号内的绿色升级值。",
+    "starter": "初始武器基础名（wiki 初始武器列第一项；括号/第二项为升级版，未采用）。",
+    "passive": "被动天赋名称。",
+    "skills": "固定 3 个位置；wiki 表格中该技能格为空时写 null，并在该角色 missing 字段注明。"
+  },
+  "characters": {
+    "骑士": {
+      "unlock": "0", "hp": 6, "armor": 5, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "破旧的手枪", "passive": "破甲保护",
+      "skills": ["火力全开", "全力攻击", "混沌打击"]
+    },
+    "游侠": {
+      "unlock": "2000 宝石", "hp": 5, "armor": 3, "energy": 180, "crit": 10, "hand": 5, "speed": 6.5,
+      "starter": "小明小红", "passive": "暴击穿透",
+      "skills": ["翻滚", "居合斩", "地堂刀"]
+    },
+    "法师": {
+      "unlock": "3000 宝石", "hp": 3, "armor": 5, "energy": 240, "crit": 0, "hand": 3, "speed": 6.5,
+      "starter": "法典", "passive": "元素精通",
+      "skills": ["奥术闪电", "寒冰穿刺", "火焰飓风"]
+    },
+    "刺客": {
+      "unlock": "4000 宝石", "hp": 4, "armor": 4, "energy": 180, "crit": 10, "hand": 5, "speed": 6.5,
+      "starter": "血刃", "passive": "近战反弹",
+      "skills": ["暗影之刃", "分身术", "影遁"]
+    },
+    "炼金术士": {
+      "unlock": "5000 宝石", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "休眠的毒泡泡泵", "passive": "毒盾",
+      "skills": ["毒气炸弹", "元素药剂", "蜜汁饮剂"]
+    },
+    "工程师": {
+      "unlock": "¥5", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 3, "speed": 6.5,
+      "starter": "欠欠时代冲锋枪", "passive": "火盾",
+      "skills": ["工程炮台", "机甲武装", "迎击炮台"]
+    },
+    "吸血鬼": {
+      "unlock": "¥5", "hp": 3, "armor": 4, "energy": 120, "crit": 5, "hand": 3, "speed": 6.5,
+      "starter": "鲜血酒杯", "passive": "击败回血",
+      "skills": ["蝙蝠突袭", "异界旋涡", "不朽之躯"]
+    },
+    "圣骑士": {
+      "unlock": "¥5", "hp": 1, "armor": 8, "energy": 120, "crit": 0, "hand": 4, "speed": 6.5,
+      "starter": "神圣连枷", "passive": "破甲冲击",
+      "skills": ["能量护盾", "神化", "爆裂飞盾"]
+    },
+    "精灵": {
+      "unlock": "12000 宝石", "hp": 5, "armor": 4, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "古老的弓", "passive": "蓄力加快",
+      "skills": ["专注射击", "箭雨", "守护精灵"]
+    },
+    "狼人": {
+      "unlock": "¥10", "hp": 11, "armor": 1, "energy": 120, "crit": 5, "hand": 5, "speed": 6.5,
+      "starter": "灼热爪刃", "passive": "刺盾",
+      "skills": ["狂化", "嗜血斩击", "吞噬"]
+    },
+    "牧师": {
+      "unlock": "12000 宝石", "hp": 3, "armor": 5, "energy": 200, "crit": 0, "hand": 3, "speed": 6.5,
+      "starter": "木制十字架", "passive": "恢复强化",
+      "skills": ["恢复法阵", "祈祷", "月影之息"]
+    },
+    "德鲁伊": {
+      "unlock": "¥10", "hp": 6, "armor": 3, "energy": 130, "crit": 5, "hand": 5, "speed": 6.5,
+      "starter": "嘎嘣脆的骨头", "passive": "随从强化",
+      "skills": ["霜烬狼袭", "剧毒藤蔓", "召唤巨熊"]
+    },
+    "机器人": {
+      "unlock": "使用工程师，花费零件20 + 电池20", "hp": 3, "armor": 6, "energy": 180, "crit": 0, "hand": 3, "speed": 6.5,
+      "starter": "卫星浮游炮", "passive": "激光加粗",
+      "skills": ["电能过载", "无人机集群", "电磁脉冲"]
+    },
+    "狂战士": {
+      "unlock": "¥10", "hp": 9, "armor": 3, "energy": 150, "crit": 5, "hand": 5, "speed": 6.5,
+      "starter": "拳套", "passive": "攻速加快",
+      "skills": ["狂暴", "散打", "跳跃"]
+    },
+    "死灵法师": {
+      "unlock": "¥10", "hp": 3, "armor": 5, "energy": 240, "crit": 0, "hand": 4, "speed": 6.5,
+      "starter": "瘟疫之杖", "passive": "子弹减速",
+      "skills": ["噩梦印记", "灾祸之石", "亡灵复生"]
+    },
+    "警官": {
+      "unlock": "老练的赏金猎人", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "罪恶克星", "passive": "连击强化",
+      "skills": ["转枪", "赏金标记", "空中支援"]
+    },
+    "道士": {
+      "unlock": "¥10", "hp": 4, "armor": 4, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "道剑", "passive": "武器浮游",
+      "skills": ["万剑归宗", "乾坤大挪移", "御剑术"]
+    },
+    "超界者": {
+      "unlock": "20000 宝石", "hp": 1, "armor": 4, "energy": 30, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "次元之握", "passive": "维度穿梭",
+      "skills": ["维度跃迁", "黑洞折射", null],
+      "missing": ["skills[2]"]
+    },
+    "古代元素使": {
+      "unlock": "20000 宝石", "hp": 3, "armor": 4, "energy": 300, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "元能之相", "passive": "元能掌握",
+      "skills": ["元素亲和", null, null],
+      "missing": ["skills[1]", "skills[2]"]
+    },
+    "枭首者": {
+      "unlock": "细胞x999", "hp": 6, "armor": 3, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "平底锅", "passive": "巨枭魔宠",
+      "skills": ["斯巴达飞踢", null, null],
+      "missing": ["skills[1]", "skills[2]"]
+    },
+    "超时空忍者": {
+      "unlock": "20000 宝石", "hp": 4, "armor": 4, "energy": 190, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "分子一文字", "passive": "天狗倒",
+      "skills": ["时空间手里剑", "超时空猎杀", null],
+      "missing": ["skills[2]"]
+    },
+    "特种骑士部队": {
+      "unlock": "20000 宝石", "hp": 4, "armor": 7, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "特种作战武器", "passive": "特种精通",
+      "skills": ["特种作战配合", null, null],
+      "missing": ["skills[1]", "skills[2]"]
+    },
+    "气宗": {
+      "unlock": "不打不相识", "hp": 4, "armor": 6, "energy": 160, "crit": 15, "hand": 5, "speed": 6.5,
+      "starter": "天地通意拳", "passive": "内劲",
+      "skills": ["冲脉拳", "斗转星移", "六脉神剑"]
+    },
+    "恶魔术士": {
+      "unlock": "¥10", "hp": 4, "armor": 5, "energy": 213, "crit": 0, "hand": 4, "speed": 6.5,
+      "starter": "暗星之钥", "passive": "噩灵宿主",
+      "skills": ["阿米的燃烧之躯", "协力：艾利欧格", "阿蒙的庇护"]
+    },
+    "矿工": {
+      "unlock": "12000 宝石", "hp": 5, "armor": 4, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "铁镐", "passive": "金盾",
+      "skills": ["地底行动", "矿车速递", "沙虫来袭"]
+    },
+    "陷阱大师": {
+      "unlock": "¥5", "hp": 5, "armor": 5, "energy": 200, "crit": 0, "hand": 4, "speed": 6,
+      "starter": "勾索枪", "passive": "尸爆",
+      "skills": ["遥控炸弹", "大变活人", "帽子戏法"]
+    },
+    "皮套王子": {
+      "unlock": "12000 宝石", "hp": 3, "armor": 4, "energy": 250, "crit": 3, "hand": 4, "speed": 7,
+      "starter": "塑料粘液枪", "passive": "元素扩散",
+      "skills": ["化身！史莱姆王！", "进击！水晶王蟹！", "降临！紫爵士！"]
+    },
+    "博士": {
+      "unlock": "¥10", "hp": 4, "armor": 4, "energy": 180, "crit": 10, "hand": 4, "speed": 6.5,
+      "starter": "离子激发枪", "passive": "雷暴",
+      "skills": ["电磁场装置", "高能电球", "量子跃迁器"]
+    },
+    "剑宗": {
+      "unlock": "12000 宝石", "hp": 5, "armor": 4, "energy": 160, "crit": 10, "hand": 4, "speed": 6.5,
+      "starter": "微风剑", "passive": "剑心",
+      "skills": ["疾风剑刃", "流云飞剑", "瞬步剑诀"]
+    },
+    "枪客": {
+      "unlock": "¥10", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 5, "speed": 6.5,
+      "starter": "龙枪·牙", "passive": "一身是胆",
+      "skills": ["斗阵枪术", "龙枪圣临", "陷阵枪诀"]
+    },
+    "领主": {
+      "unlock": "12000 宝石", "hp": 6, "armor": 5, "energy": 160, "crit": 10, "hand": 5, "speed": 6.5,
+      "starter": "刀盾", "passive": "战意涌动",
+      "skills": ["战意风暴", "决心猛冲", "黑暗领主"]
+    },
+    "咒法骑士": {
+      "unlock": "6000 宝石", "hp": 4, "armor": 4, "energy": 200, "crit": 5, "hand": 3, "speed": 6.5,
+      "starter": "驱逐法杖", "passive": "静能储蓄",
+      "skills": ["能量迸涌", "庇护法阵", "奥术飞弹"]
+    },
+    "占星师": {
+      "unlock": "¥10", "hp": 3, "armor": 5, "energy": 180, "crit": 0, "hand": 4, "speed": 6.5,
+      "starter": "占星法杖", "passive": "星之咒",
+      "skills": ["骤雨流星", "命运之轮", null],
+      "missing": ["skills[2]"]
+    },
+    "武斗家": {
+      "unlock": "16888 宝石", "hp": 4, "armor": 5, "energy": 160, "crit": 10, "hand": 5, "speed": 6.5,
+      "starter": "斗气拳", "passive": "格斗之魂",
+      "skills": ["猛虎拳", "旋风腿", null],
+      "missing": ["skills[2]"]
+    },
+    "戏法师": {
+      "unlock": "12000 宝石", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "幻影之刃", "passive": "森罗幻象",
+      "skills": ["戏影剑舞", "幻幕戏法", null],
+      "missing": ["skills[2]"]
+    },
+    "吟游诗人": {
+      "unlock": "15000 宝石", "hp": 5, "armor": 5, "energy": 200, "crit": 3, "hand": 5, "speed": 6.5,
+      "starter": "森弦", "passive": "落音缤纷",
+      "skills": ["音律节拍", "共振乐章", null],
+      "missing": ["skills[2]"]
+    },
+    "枪手": {
+      "unlock": "¥10", "hp": 5, "armor": 4, "energy": 200, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "寒鸦", "passive": "愈战愈勇",
+      "skills": ["枪神降临", "狩猎领域", null],
+      "missing": ["skills[2]"]
+    },
+    "机械姬": {
+      "unlock": "¥10", "hp": 3, "armor": 6, "energy": 200, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "极电双星", "passive": "充能协议",
+      "skills": ["虹烬共鸣", null, null],
+      "missing": ["skills[1]", "skills[2]"]
+    },
+    "船长": {
+      "unlock": "15000 宝石", "hp": 6, "armor": 5, "energy": 200, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "刀与火铳", "passive": "爆炸狂欢",
+      "skills": ["炸桶派对", "冲啊！逐浪号！", null],
+      "missing": ["skills[2]"]
+    },
+    "阴阳家": {
+      "unlock": "¥10", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "阴阳", "passive": "阴阳流转",
+      "skills": ["明昼拳", null, null],
+      "missing": ["skills[1]", "skills[2]"]
+    },
+    "枪械专家": {
+      "unlock": "15000 宝石", "hp": 4, "armor": 5, "energy": 200, "crit": 5, "hand": 3, "speed": 6.5,
+      "starter": "编号041", "passive": "枪械回响",
+      "skills": ["火力增援", null, null],
+      "missing": ["skills[1]", "skills[2]"]
+    },
+    "厨娘": {
+      "unlock": "15000 宝石", "hp": 5, "armor": 5, "energy": 180, "crit": 5, "hand": 4, "speed": 6.5,
+      "starter": "锅铲", "passive": "地牢美食家",
+      "skills": ["神秘炖锅", null, null],
+      "missing": ["skills[1]", "skills[2]"]
+    }
+  }
+}

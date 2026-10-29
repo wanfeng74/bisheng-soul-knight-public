@@ -23,13 +23,14 @@ export function defaultSave() {
     lifetimeCoins: 0,
     unlockedChars: ['knight'],
     charUpgrades: {},          /* { charId: { hp, armor, energy, crit, speed, skill } } */
+    skillChoices: {},          /* { charId: 0|1|2 } —— 当前出战技能 */
     unlockedWeapons: {},       /* { weaponId: true } —— 锻造/图鉴解锁 */
     achievements: {},          /* { achId: true } */
     stats: {
       runs: 0, wins: 0, deaths: 0, kills: 0, bossKills: 0,
       bestFloor: 0, bestRoom: 0, totalGems: 0, playMs: 0, revives: 0
     },
-    settings: { soundOn: true, autoAim: true, shake: true, showFps: false, debugInvincible: false, petId: 'random' },
+    settings: { soundOn: true, autoAim: true, shake: true, showFps: false, debugInvincible: false, debugInfiniteCurrency: false, debugGemSnapshot: 0, petId: 'random' },
     lastChar: 'knight',
     seenIntro: false,
     runSave: null,
@@ -216,6 +217,15 @@ export function normalize(d) {
     if (!Object.prototype.hasOwnProperty.call(cu, cid)) continue
     f.charUpgrades[cid] = objOfNums(cu[cid], ['hp', 'armor', 'energy', 'crit', 'speed', 'skill'])
   }
+  f.skillChoices = {}
+  var sc = d.skillChoices
+  if (sc && typeof sc === 'object') {
+    for (var sid in sc) {
+      if (!Object.prototype.hasOwnProperty.call(sc, sid)) continue
+      var idx = Number(sc[sid])
+      if (idx === 1 || idx === 2) f.skillChoices[sid] = idx
+    }
+  }
   var uw = (d.unlockedWeapons && typeof d.unlockedWeapons === 'object') ? d.unlockedWeapons : {}
   f.unlockedWeapons = {}
   for (var wid in uw) {
@@ -248,6 +258,8 @@ export function normalize(d) {
     shake: se.shake !== false,
     showFps: !!se.showFps,
     debugInvincible: se.debugInvincible === true,
+    debugInfiniteCurrency: se.debugInfiniteCurrency === true,
+    debugGemSnapshot: num(se.debugGemSnapshot, 0),
     petId: (typeof se.petId === 'string' && se.petId) ? se.petId : 'random'
   }
   f.lastChar = (typeof d.lastChar === 'string' && d.lastChar) ? d.lastChar : 'knight'

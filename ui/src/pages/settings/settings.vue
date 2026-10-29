@@ -51,6 +51,12 @@
             <text class="switch-text">{{ debugInvincible ? '开' : '关' }}</text>
           </div>
         </div>
+        <div class="set-row">
+          <text class="set-label">调试模式 · 无限金币宝石</text>
+          <div class="switch-btn" :class="debugCurrency ? 'switch-on' : 'switch-off'" @touchstart="toggleDebugCurrency" @click="toggleDebugCurrency" @tap="toggleDebugCurrency">
+            <text class="switch-text">{{ debugCurrency ? '开' : '关' }}</text>
+          </div>
+        </div>
         <text class="panel-title">存档</text>
         <div class="danger-btn" @touchstart="askReset" @click="askReset" @tap="askReset">
           <text class="danger-text">重置存档</text>
@@ -64,6 +70,7 @@
           <text class="about-value">{{ r.value }}</text>
         </div>
         <text class="about-tip">纯单机像素地牢 · 本地存档 · 无内购</text>
+        <text class="disclaimer">免责声明：本作为《元气骑士》同人创作，仅供学习交流使用，非官方原版，与官方无关。</text>
       </div>
     </div>
     </scroller>
@@ -119,6 +126,7 @@ export default {
       shake: true,
       showFps: false,
       debugInvincible: false,
+      debugCurrency: false,
       petId: 'random',
       petLabel: '随机',
       confirmReset: false,
@@ -164,6 +172,11 @@ export default {
       this.shake = se.shake !== false
       this.showFps = !!se.showFps
       this.debugInvincible = se.debugInvincible === true
+      this.debugCurrency = se.debugInfiniteCurrency === true
+      if (this.debugCurrency) {
+        if (!se.debugGemSnapshot) { se.debugGemSnapshot = db.gems || 0; this.db.settings.debugGemSnapshot = se.debugGemSnapshot }
+        db.gems = 999999
+      }
       this.petId = (typeof se.petId === 'string' && se.petId) ? se.petId : 'random'
       this.petLabel = this.petId === 'random' ? '随机' : ((PETS[this.petId] || {}).name || '随机')
       try { this.soundOn = isSoundOn() } catch (eS) { this.soundOn = se.soundOn !== false }
@@ -280,6 +293,22 @@ export default {
         this.saveDb()
       } catch (e) {}
     },
+    toggleDebugCurrency() {
+      if (this._dedupe()) return
+      this.debugCurrency = !this.debugCurrency
+      try {
+        if (!this.db.settings) this.db.settings = {}
+        this.db.settings.debugInfiniteCurrency = this.debugCurrency
+        if (this.debugCurrency) {
+          if (!this.db.settings.debugGemSnapshot) this.db.settings.debugGemSnapshot = this.db.gems || 0
+          this.db.gems = 999999
+        } else {
+          this.db.gems = this.db.settings.debugGemSnapshot || 0
+          this.db.settings.debugGemSnapshot = 0
+        }
+        this.saveDb()
+      } catch (e) {}
+    },
     askReset() {
       if (this._dedupe()) return
       this.confirmReset = true
@@ -344,11 +373,12 @@ export default {
 .switch-text { fontSize: 5.2vh; fontWeight: 700; color: #ffd93d; }
 .danger-btn { width: 100%; height: 11vh; backgroundColor: #3a1a1e; borderWidth: 2px; borderColor: #ff5a5a; borderRadius: 0.8vh; alignItems: center; justifyContent: center; }
 .danger-text { fontSize: 6vh; fontWeight: 700; color: #ff8a8a; }
-.danger-hint { fontSize: 1.4vw; color: #8f89a8; marginTop: 0.8vh; lineHeight: 6.6vh; }
+.danger-hint { fontSize: 1.4vw; color: #8f89a8; marginTop: 0.8vh; marginBottom: 0.6vh; }
 .about-row { width: 100%; height: auto; paddingTop: 0.7vh; paddingBottom: 0.7vh; flexDirection: row; alignItems: center; backgroundColor: #201a2e; borderRadius: 0.6vh; paddingLeft: 0.8vw; paddingRight: 0.8vw; marginBottom: 0.7vh; }
 .about-label { width: 8vw; fontSize: 1.55vw; color: #8f89a8; }
 .about-value { flex: 1; fontSize: 1.47vw; color: #e8e4f5; }
-.about-tip { fontSize: 1.4vw; color: #6b6880; marginTop: 0.8vh; }
+.about-tip { fontSize: 1.4vw; color: #6b6880; marginTop: 0.8vh; marginBottom: 0.8vh; }
+  .disclaimer { width: 100%; fontSize: 1.25vw; color: #8f86a8; marginTop: 1.2vh; marginBottom: 1.2vh; }
 .mask { position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; backgroundColor: rgba(0,0,0,0.86); alignItems: center; justifyContent: center; zIndex: 120; }
 .dialog { width: 56vw; backgroundColor: #1b1726; borderWidth: 3px; borderColor: #ff5a5a; borderRadius: 1.2vh; paddingTop: 1.6vh; paddingBottom: 1.6vh; paddingLeft: 1.4vw; paddingRight: 1.4vw; flexDirection: column; }
 .dialog-title { fontSize: 7vh; fontWeight: 700; color: #ff8a8a; marginBottom: 1vh; }

@@ -1,0 +1,1640 @@
+{
+  "source": "Module:数据/天赋（wiki 页面「天赋」的数据模块）+ data/wiki/characters-full.json 的角色被动字段",
+  "sourceNote": "天赋来自 wiki 模块 Module:数据/天赋：data1 可选天赋 50 条、data2 角色限定天赋 14 条、data3 特殊天赋 33 条，共 97 条（每组按 站内名/官方名/效果 三元组存储）。角色被动 42 条来自 wiki「角色/基本信息汇总」表格。rarity/quality 该模块未提供，统一 null（不编造）。",
+  "fetchedAt": "2026-10-27",
+  "fieldNotes": {
+    "name": "wiki 站内命名（标准名）",
+    "officialName": "7.2.0 起官方名称，可能为空",
+    "group": "可选天赋 / 角色限定天赋 / 特殊天赋",
+    "desc": "效果文本（去 HTML 标签、<br> 转换行）",
+    "effect": "效果原文（保留颜色 span 等 HTML）",
+    "rarity": "天赋模块无品质字段，null",
+    "quality": "同上，null",
+    "data_type": "talent（模块天赋）或 passive（角色被动）",
+    "wikiPage": "对应 wiki 页面 URL"
+  },
+  "stats": {
+    "talents": 97,
+    "byGroup": {
+      "可选天赋": 50,
+      "角色限定天赋": 14,
+      "特殊天赋": 33
+    },
+    "passives": 42,
+    "matching": {
+      "total": 80,
+      "matched": 15,
+      "exact": 7,
+      "synonym": 8,
+      "unmatched": 65
+    },
+    "quality": "wiki 未提供天赋品质（不可得），全部 null"
+  },
+  "talents": [
+    {
+      "name": "破甲保护",
+      "officialName": "刚毅护盾",
+      "group": "可选天赋",
+      "desc": "护甲被破坏时不受到额外伤害",
+      "effect": "护甲被破坏时不受到额外伤害",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%A0%B4%E7%94%B2%E4%BF%9D%E6%8A%A4"
+    },
+    {
+      "name": "毒盾",
+      "officialName": "御毒之盾",
+      "group": "可选天赋",
+      "desc": "免疫毒气及减速，对敌人中毒伤害提升",
+      "effect": "免疫毒气及减速，对敌人中毒伤害提升",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%AF%92%E7%9B%BE"
+    },
+    {
+      "name": "火盾",
+      "officialName": "烈火神盾",
+      "group": "可选天赋",
+      "desc": "降低爆炸伤害并免疫火焰，对敌人火焰伤害提升",
+      "effect": "降低爆炸伤害并免疫火焰，对敌人火焰伤害提升",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%81%AB%E7%9B%BE"
+    },
+    {
+      "name": "冰盾",
+      "officialName": "霜结冰盾",
+      "group": "可选天赋",
+      "desc": "免疫冰冻，对敌人的冰冻时间增加",
+      "effect": "免疫冰冻，对敌人的冰冻时间增加",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%86%B0%E7%9B%BE"
+    },
+    {
+      "name": "刺盾",
+      "officialName": "钉刺防盾",
+      "group": "可选天赋",
+      "desc": "免疫陷阱，免疫碰撞伤害",
+      "effect": "免疫陷阱，免疫碰撞伤害",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%88%BA%E7%9B%BE"
+    },
+    {
+      "name": "破甲冲击",
+      "officialName": "碎盾冲击",
+      "group": "可选天赋",
+      "desc": "受到攻击时释放冲击随从强化波",
+      "effect": "受到攻击时释放冲击随从强化波",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%A0%B4%E7%94%B2%E5%86%B2%E5%87%BB"
+    },
+    {
+      "name": "金盾",
+      "officialName": "黄金甲",
+      "group": "可选天赋",
+      "desc": "每100金币增加1点护甲上限，最多增加3点",
+      "effect": "每100金币增加1点护甲上限，最多增加3点",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%87%91%E7%9B%BE"
+    },
+    {
+      "name": "护甲+1",
+      "officialName": "坚若磐石",
+      "group": "可选天赋",
+      "desc": "护甲+1",
+      "effect": "护甲+1",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%8A%A4%E7%94%B2%2B1"
+    },
+    {
+      "name": "破甲修复",
+      "officialName": "应急护盾",
+      "group": "可选天赋",
+      "desc": "护甲破碎时立即恢复50%的护甲值，60秒可触发一次",
+      "effect": "护甲破碎时立即恢复50%的护甲值，60秒可触发一次",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%A0%B4%E7%94%B2%E4%BF%AE%E5%A4%8D"
+    },
+    {
+      "name": "元素生甲",
+      "officialName": "元灵加护",
+      "group": "可选天赋",
+      "desc": "对敌人施加负面状态时，25%几率恢复1点护甲。",
+      "effect": "对敌人施加负面状态时，25%几率恢复1点护甲。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E7%B4%A0%E7%94%9F%E7%94%B2"
+    },
+    {
+      "name": "生命+4",
+      "officialName": "勇者之心",
+      "group": "可选天赋",
+      "desc": "提升生命值上限",
+      "effect": "提升生命值上限",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%94%9F%E5%91%BD%2B4"
+    },
+    {
+      "name": "药水箱子",
+      "officialName": "拾荒者",
+      "group": "可选天赋",
+      "desc": "打破箱子可能掉落生命药水，箱子掉落能量球的概率提升",
+      "effect": "打破箱子可能掉落生命药水，箱子掉落能量球的概率提升",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%8D%AF%E6%B0%B4%E7%AE%B1%E5%AD%90"
+    },
+    {
+      "name": "恢复强化",
+      "officialName": null,
+      "group": "可选天赋",
+      "desc": "获得100%的恢复强度",
+      "effect": "获得100%的恢复强度",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%81%A2%E5%A4%8D%E5%BC%BA%E5%8C%96"
+    },
+    {
+      "name": "击败回血",
+      "officialName": "生命汲取",
+      "group": "可选天赋",
+      "desc": "击败敌人将有概率掉落生命球",
+      "effect": "击败敌人将有概率掉落生命球",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%87%BB%E8%B4%A5%E5%9B%9E%E8%A1%80"
+    },
+    {
+      "name": "击败回蓝",
+      "officialName": "能量汲取",
+      "group": "可选天赋",
+      "desc": "击败敌人将有概率掉落能量球",
+      "effect": "击败敌人将有概率掉落能量球",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%87%BB%E8%B4%A5%E5%9B%9E%E8%93%9D"
+    },
+    {
+      "name": "能量+100",
+      "officialName": "奥术辞典",
+      "group": "可选天赋",
+      "desc": "能量上限+100",
+      "effect": "能量上限+100",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%83%BD%E9%87%8F%2B100"
+    },
+    {
+      "name": "疾步生甲",
+      "officialName": "疾步生甲",
+      "group": "可选天赋",
+      "desc": "造成暴击会短暂提升角色移动速度。角色移动时会缓慢恢复护甲",
+      "effect": "造成暴击会短暂提升角色移动速度。角色移动时会缓慢恢复护甲",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%96%BE%E6%AD%A5%E7%94%9F%E7%94%B2"
+    },
+    {
+      "name": "雷暴",
+      "officialName": "磁暴电涌",
+      "group": "可选天赋",
+      "desc": "暴击提升10%。释放技能或暴击时，在目标处落下雷电。",
+      "effect": "暴击提升10%。释放技能或暴击时，在目标处落下雷电。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%9B%B7%E6%9A%B4"
+    },
+    {
+      "name": "暴击穿透",
+      "officialName": "穿心膛线",
+      "group": "可选天赋",
+      "desc": "子弹暴击会穿透敌人",
+      "effect": "子弹暴击会穿透敌人",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%9A%B4%E5%87%BB%E7%A9%BF%E9%80%8F"
+    },
+    {
+      "name": "子弹弹射",
+      "officialName": "子弹弹射",
+      "group": "可选天赋",
+      "desc": "子弹拥有弹射效果",
+      "effect": "子弹拥有弹射效果",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AD%90%E5%BC%B9%E5%BC%B9%E5%B0%84"
+    },
+    {
+      "name": "散弹增加",
+      "officialName": "超级散弹",
+      "group": "可选天赋",
+      "desc": "增加散弹枪的子弹数量",
+      "effect": "增加散弹枪的子弹数量",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%95%A3%E5%BC%B9%E5%A2%9E%E5%8A%A0"
+    },
+    {
+      "name": "连击强化",
+      "officialName": "骤雨连击",
+      "group": "可选天赋",
+      "desc": "连续攻击武器的连击次数增加",
+      "effect": "连续攻击武器的连击次数增加",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%BF%9E%E5%87%BB%E5%BC%BA%E5%8C%96"
+    },
+    {
+      "name": "子弹分裂",
+      "officialName": "分裂弹",
+      "group": "可选天赋",
+      "desc": "远程子弹命中时，有50%几率释放一枚额外子弹。",
+      "effect": "远程子弹命中时，有50%几率释放一枚额外子弹。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AD%90%E5%BC%B9%E5%88%86%E8%A3%82"
+    },
+    {
+      "name": "武器多持",
+      "officialName": "背包扩容",
+      "group": "可选天赋",
+      "desc": "能额外携带一把武器",
+      "effect": "能额外携带一把武器",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%AD%A6%E5%99%A8%E5%A4%9A%E6%8C%81"
+    },
+    {
+      "name": "蓄力加快",
+      "officialName": "急速蓄力",
+      "group": "可选天赋",
+      "desc": "蓄力武器蓄力加快",
+      "effect": "蓄力武器蓄力加快",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%93%84%E5%8A%9B%E5%8A%A0%E5%BF%AB"
+    },
+    {
+      "name": "元素精通",
+      "officialName": "魔法暴动",
+      "group": "可选天赋",
+      "desc": "元素效果子弹暴击也造成双倍伤害。加强法杖武器",
+      "effect": "元素效果子弹暴击也造成双倍伤害。加强法杖武器",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E7%B4%A0%E7%B2%BE%E9%80%9A"
+    },
+    {
+      "name": "激光加粗",
+      "officialName": "高能光束",
+      "group": "可选天赋",
+      "desc": "增加光电类武器宽度，并免疫感电伤害",
+      "effect": "增加光电类武器宽度，并免疫感电伤害",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%BF%80%E5%85%89%E5%8A%A0%E7%B2%97"
+    },
+    {
+      "name": "近战扩大",
+      "officialName": "剑术大师",
+      "group": "可选天赋",
+      "desc": "增加近战武器攻击距离",
+      "effect": "增加近战武器攻击距离",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%BF%91%E6%88%98%E6%89%A9%E5%A4%A7"
+    },
+    {
+      "name": "近战反弹",
+      "officialName": "反击之刃",
+      "group": "可选天赋",
+      "desc": "近战武器反弹子弹",
+      "effect": "近战武器反弹子弹",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%BF%91%E6%88%98%E5%8F%8D%E5%BC%B9"
+    },
+    {
+      "name": "旋风斩",
+      "officialName": "旋风斩",
+      "group": "可选天赋",
+      "desc": "近战击败敌人时，释放一次旋风斩，冷却时间4秒。",
+      "effect": "近战击败敌人时，释放一次旋风斩，冷却时间4秒。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%97%8B%E9%A3%8E%E6%96%A9"
+    },
+    {
+      "name": "练气要诀",
+      "officialName": "练气要诀",
+      "group": "可选天赋",
+      "desc": "手刀攻击时，消耗能量，释放气功波",
+      "effect": "手刀攻击时，消耗能量，释放气功波",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%BB%83%E6%B0%94%E8%A6%81%E8%AF%80"
+    },
+    {
+      "name": "冷却加快",
+      "officialName": "冷却缩减",
+      "group": "可选天赋",
+      "desc": "减少技能冷却时间",
+      "effect": "减少技能冷却时间",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%86%B7%E5%8D%B4%E5%8A%A0%E5%BF%AB"
+    },
+    {
+      "name": "雕像精通",
+      "officialName": "双倍雕像",
+      "group": "可选天赋",
+      "desc": "雕像能触发两次，能够同时使用两个雕像",
+      "effect": "雕像能触发两次，能够同时使用两个雕像",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%9B%95%E5%83%8F%E7%B2%BE%E9%80%9A"
+    },
+    {
+      "name": "攻速加快",
+      "officialName": "超频",
+      "group": "可选天赋",
+      "desc": "每次攻击获得1层持续3秒的攻速提升，每层+2%，最多5层；叠满后额外+10%攻速。",
+      "effect": "每次攻击获得1层持续3秒的攻速提升，每层+2%，最多5层；叠满后额外+10%攻速。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%94%BB%E9%80%9F%E5%8A%A0%E5%BF%AB"
+    },
+    {
+      "name": "精准暴击",
+      "officialName": "精准打击",
+      "group": "可选天赋",
+      "desc": "子弹更准更容易暴击",
+      "effect": "子弹更准更容易暴击",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%B2%BE%E5%87%86%E6%9A%B4%E5%87%BB"
+    },
+    {
+      "name": "动能打击",
+      "officialName": "动能打击",
+      "group": "可选天赋",
+      "desc": "移动时积攒动能，下一次攻击命中时消耗全部动能造成最多3额外伤害，动能攒满时必定暴击并眩晕目标。",
+      "effect": "移动时积攒动能，下一次攻击命中时消耗全部动能造成最多3额外伤害，动能攒满时必定暴击并眩晕目标。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%8A%A8%E8%83%BD%E6%89%93%E5%87%BB"
+    },
+    {
+      "name": "满血暴击",
+      "officialName": "突袭",
+      "group": "可选天赋",
+      "desc": "攻击满血敌人时必定暴击。",
+      "effect": "攻击满血敌人时必定暴击。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%BB%A1%E8%A1%80%E6%9A%B4%E5%87%BB"
+    },
+    {
+      "name": "血怒",
+      "officialName": "损血暴击",
+      "group": "可选天赋",
+      "desc": "生命与护甲越低，暴击率和攻速提升越高。",
+      "effect": "生命与护甲越低，暴击率和攻速提升越高。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%A1%80%E6%80%92"
+    },
+    {
+      "name": "格斗之魂",
+      "officialName": null,
+      "group": "可选天赋",
+      "desc": "攻击命中叠加「斗志」，持续5秒，最多10层；满层时触发「格斗之魂」，持续5秒，近战子弹体积和暴击率大幅提升。",
+      "effect": "攻击命中叠加「斗志」，持续5秒，最多10层；满层时触发「格斗之魂」，持续5秒，近战子弹体积和暴击率大幅提升。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%A0%BC%E6%96%97%E4%B9%8B%E9%AD%82"
+    },
+    {
+      "name": "元素轮转",
+      "officialName": null,
+      "group": "可选天赋",
+      "desc": "玩家每3秒在燃烧、冰冻、中毒、感电状态间循环切换。处于对应状态时，攻击命中敌人有50%概率触发对应元素效果，并使该元素伤害提升50%",
+      "effect": "玩家每3秒在燃烧、冰冻、中毒、感电状态间循环切换。处于对应状态时，攻击命中敌人有50%概率触发对应元素效果，并使该元素伤害提升50%",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E7%B4%A0%E8%BD%AE%E8%BD%AC"
+    },
+    {
+      "name": "一身是胆",
+      "officialName": null,
+      "group": "可选天赋",
+      "desc": "每次使用技能都会提升10%伤害，可叠加5层，角色血量降至1时触发满层效果。",
+      "effect": "每次使用技能都会提升10%伤害，可叠加5层，角色血量降至1时触发满层效果。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E4%B8%80%E8%BA%AB%E6%98%AF%E8%83%86"
+    },
+    {
+      "name": "随从强化",
+      "officialName": "最好的朋友",
+      "group": "可选天赋",
+      "desc": "宠物和随从体积和生命值增幅50%，造成的伤害增幅100%",
+      "effect": "宠物和随从体积和生命值增幅50%，造成的伤害增幅100%",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%9A%8F%E4%BB%8E%E5%BC%BA%E5%8C%96"
+    },
+    {
+      "name": "热狗",
+      "officialName": "派对时间！",
+      "group": "可选天赋",
+      "desc": "战斗状态下，宠物和随从的攻击频率增幅70%，移动速度增幅60%",
+      "effect": "战斗状态下，宠物和随从的攻击频率增幅70%，移动速度增幅60%",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%83%AD%E7%8B%97"
+    },
+    {
+      "name": "子弹减速",
+      "officialName": "时空迟滞",
+      "group": "可选天赋",
+      "desc": "降低敌人子弹速度，拾起金币能量球范围提升",
+      "effect": "降低敌人子弹速度，拾起金币能量球范围提升",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AD%90%E5%BC%B9%E5%87%8F%E9%80%9F"
+    },
+    {
+      "name": "尸爆",
+      "officialName": "易爆残骸",
+      "group": "可选天赋",
+      "desc": "敌人死亡时有概率产生爆炸",
+      "effect": "敌人死亡时有概率产生爆炸",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%B0%B8%E7%88%86"
+    },
+    {
+      "name": "愈战愈勇",
+      "officialName": "专注时刻",
+      "group": "可选天赋",
+      "desc": "每击败1名敌人后攻速提升5%，暴击率提升5%，偏移减少2，最多叠加4层，持续时间为10秒（每击败敌人会重置持续时间）。",
+      "effect": "每击败1名敌人后攻速提升5%，暴击率提升5%，偏移减少2，最多叠加4层，持续时间为10秒（每击败敌人会重置持续时间）。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%84%88%E6%88%98%E6%84%88%E5%8B%87"
+    },
+    {
+      "name": "商店半价",
+      "officialName": "通通半价！",
+      "group": "可选天赋",
+      "desc": "商店打五折",
+      "effect": "商店打五折",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%95%86%E5%BA%97%E5%8D%8A%E4%BB%B7"
+    },
+    {
+      "name": "宝石增加",
+      "officialName": "宝石矿工",
+      "group": "可选天赋",
+      "desc": "游戏结束时获得更多宝石奖励",
+      "effect": "游戏结束时获得更多宝石奖励",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AE%9D%E7%9F%B3%E5%A2%9E%E5%8A%A0"
+    },
+    {
+      "name": "枪械回响",
+      "officialName": null,
+      "group": "可选天赋",
+      "desc": "每隔一段时间，攻击会额外触发这局游戏内随机一把已拾取过的武器的攻击，持续一小段时间。这个效果的触发间隔会随着拾取过的武器数量提高而缩减。",
+      "effect": "每隔一段时间，攻击会额外触发这局游戏内随机一把已拾取过的武器的攻击，持续一小段时间。这个效果的触发间隔会随着拾取过的武器数量提高而缩减。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%9E%AA%E6%A2%B0%E5%9B%9E%E5%93%8D"
+    },
+    {
+      "name": "地牢美食家",
+      "officialName": null,
+      "group": "可选天赋",
+      "desc": "击败敌人有概率掉落食材，食用后获得食材效果。",
+      "effect": "击败敌人有概率掉落食材，食用后获得食材效果。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%9C%B0%E7%89%A2%E7%BE%8E%E9%A3%9F%E5%AE%B6"
+    },
+    {
+      "name": "武器浮游",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "使你的副武器进入浮游状态【角色限定】",
+      "effect": "使你的副武器进入浮游状态【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%AD%A6%E5%99%A8%E6%B5%AE%E6%B8%B8"
+    },
+    {
+      "name": "内劲",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "手刀因气宗修行的功夫而转变为三段击打，第三段击打会释放气功波，造成范围伤害【角色限定】",
+      "effect": "手刀因气宗修行的功夫而转变为三段击打，第三段击打会释放气功波，造成范围伤害【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%86%85%E5%8A%B2"
+    },
+    {
+      "name": "噩灵宿主",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "击杀敌人时，会召唤出一个火焰小鬼。火焰小鬼跟随玩家移动，并且可以阻挡子弹【角色限定】",
+      "effect": "击杀敌人时，会召唤出一个火焰小鬼。火焰小鬼跟随玩家移动，并且可以阻挡子弹【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%99%A9%E7%81%B5%E5%AE%BF%E4%B8%BB"
+    },
+    {
+      "name": "元能掌握",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "降低爆炸伤害并免疫火焰，对敌人火焰伤害提升，免疫冰冻，对敌人的冰冻时间增加。战斗期间随机升起元素碑攻击敌人【角色限定】",
+      "effect": "降低爆炸伤害并免疫火焰，对敌人火焰伤害提升，免疫冰冻，对敌人的冰冻时间增加。战斗期间随机升起元素碑攻击敌人【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E8%83%BD%E6%8E%8C%E6%8F%A1"
+    },
+    {
+      "name": "维度穿梭",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "超界者会在多个维度穿梭，这会让他有一定概率不会受到任何伤害。每5次手刀攻击后会释放1次强化手刀【角色限定】",
+      "effect": "超界者会在多个维度穿梭，这会让他有一定概率不会受到任何伤害。每5次手刀攻击后会释放1次强化手刀【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%BB%B4%E5%BA%A6%E7%A9%BF%E6%A2%AD"
+    },
+    {
+      "name": "天狗倒",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "每隔一段时间自动对近身的敌人发动快速踢击",
+      "effect": "每隔一段时间自动对近身的敌人发动快速踢击",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%A4%A9%E7%8B%97%E5%80%92"
+    },
+    {
+      "name": "特种精通",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "每次切换形态时，获得持续一段时间额外的攻速加成，期间近战武器攻击会附带剑气，法杖的攻击加强",
+      "effect": "每次切换形态时，获得持续一段时间额外的攻速加成，期间近战武器攻击会附带剑气，法杖的攻击加强",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%89%B9%E7%A7%8D%E7%B2%BE%E9%80%9A"
+    },
+    {
+      "name": "剑心",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "释放技能提升移动速度，完整释放技能后剑意+5【角色限定】",
+      "effect": "释放技能提升移动速度，完整释放技能后剑意+5【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%89%91%E5%BF%83"
+    },
+    {
+      "name": "战意涌动",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "攻击敌人或者承受伤害可获取战意。战意叠加至满层后获得增益，提升自身体型、攻击速度、移动速度，并增强自己的攻击。【角色限定】",
+      "effect": "攻击敌人或者承受伤害可获取战意。战意叠加至满层后获得增益，提升自身体型、攻击速度、移动速度，并增强自己的攻击。【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%88%98%E6%84%8F%E6%B6%8C%E5%8A%A8"
+    },
+    {
+      "name": "星之咒",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "技能施加星之咒，叠至3层时触发占星术，效果视技能而定并提供星能。积累足够星能可以强化技能。【角色限定】",
+      "effect": "技能施加星之咒，叠至3层时触发占星术，效果视技能而定并提供星能。积累足够星能可以强化技能。【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%98%9F%E4%B9%8B%E5%92%92"
+    },
+    {
+      "name": "森罗幻象",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "每隔5秒，会创造一个幻象，幻象会自动攻击敌人",
+      "effect": "每隔5秒，会创造一个幻象，幻象会自动攻击敌人",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%A3%AE%E7%BD%97%E5%B9%BB%E8%B1%A1"
+    },
+    {
+      "name": "充能协议",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "电量上限增加，消耗能量可转化为对应的电量【角色限定】",
+      "effect": "电量上限增加，消耗能量可转化为对应的电量【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%85%E8%83%BD%E5%8D%8F%E8%AE%AE"
+    },
+    {
+      "name": "爆炸狂欢",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "免疫任何爆炸桶造成的伤害。",
+      "effect": "免疫任何爆炸桶造成的伤害。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%88%86%E7%82%B8%E7%8B%82%E6%AC%A2"
+    },
+    {
+      "name": "阴阳流转",
+      "officialName": null,
+      "group": "角色限定天赋",
+      "desc": "使用技能会获取阴值或阳值，并强化技能效果【角色限定】",
+      "effect": "使用技能会获取阴值或阳值，并强化技能效果【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%98%B4%E9%98%B3%E6%B5%81%E8%BD%AC"
+    },
+    {
+      "name": "井水增益",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "能量恢复+1",
+      "effect": "能量恢复+1",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E4%BA%95%E6%B0%B4%E5%A2%9E%E7%9B%8A"
+    },
+    {
+      "name": "导师强化",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "角色技能变得更强大了",
+      "effect": "角色技能变得更强大了",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AF%BC%E5%B8%88%E5%BC%BA%E5%8C%96"
+    },
+    {
+      "name": "神圣新星",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "受到致命伤害时，释放神圣新星，免疫这次伤害，冷却时间300秒。\n神圣新星：清除弹幕，消灭非领主敌人，对领主造成大量伤害，治疗所有友军。",
+      "effect": "受到致命伤害时，释放<span style=\"color: #ffeb04;\">神圣新星</span>，免疫这次伤害，冷却时间300秒。<br/><span style=\"color: #ffeb04;\">神圣新星</span>：清除弹幕，消灭非领主敌人，对领主造成大量伤害，治疗所有友军。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%A5%9E%E5%9C%A3%E6%96%B0%E6%98%9F"
+    },
+    {
+      "name": "冰霜之环",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "每10秒获得一层屏障，最多存储1层，每层屏障可抵挡一次伤害并释放冰霜之环。\n冰霜之环：使周围的敌人进入寒冷状态，降低移动速度，若敌人处在寒冷状态下，会将其冻结。",
+      "effect": "每10秒获得一层屏障，最多存储1层，每层屏障可抵挡一次伤害并释放<span style=\"color: #0ff;\">冰霜之环</span>。<br/><span style=\"color: #0ff;\">冰霜之环</span>：使周围的敌人进入寒冷状态，降低移动速度，若敌人处在寒冷状态下，会将其冻结。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%86%B0%E9%9C%9C%E4%B9%8B%E7%8E%AF"
+    },
+    {
+      "name": "疾步生风",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "移动一定距离后，释放一道龙卷风，持续吸附并伤害敌人，可消除弹幕。",
+      "effect": "移动一定距离后，释放一道<span style=\"color: #0f0;\">龙卷风</span>，持续吸附并伤害敌人，可消除弹幕。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%96%BE%E6%AD%A5%E7%94%9F%E9%A3%8E"
+    },
+    {
+      "name": "灵魂打击",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "敌人死亡时掉落灵魂，收集足够的灵魂后，下一次攻击命中时释放灵魂打击。\n灵魂打击：对目标造成大量伤害，对目标附近造成范围伤害，每次释放后伤害永久增加0.5%",
+      "effect": "敌人死亡时掉落灵魂，收集足够的灵魂后，下一次攻击命中时释放<span style=\"color: #a473fc;\">灵魂打击</span>。<br/><span style=\"color: #a473fc;\">灵魂打击</span>：对目标造成大量伤害，对目标附近造成范围伤害，每次释放后伤害永久增加0.5%",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%81%B5%E9%AD%82%E6%89%93%E5%87%BB"
+    },
+    {
+      "name": "元素爆发",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "释放技能后，下次攻击获得增强，并附带随机元素效果。",
+      "effect": "释放技能后，下次攻击获得增强，并附带随机元素效果。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E7%B4%A0%E7%88%86%E5%8F%91"
+    },
+    {
+      "name": "烈焰吐息",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "每3秒释放一次锥形的烈焰吐息。\n烈焰吐息：灼烧命中的敌人，若敌人处在灼烧状态下，将造成一次爆炸。",
+      "effect": "每3秒释放一次锥形的<span style=\"color: #f00;\">烈焰吐息</span>。<br/><span style=\"color: #f00;\">烈焰吐息</span>：灼烧命中的敌人，若敌人处在灼烧状态下，将造成一次爆炸。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%83%88%E7%84%B0%E5%90%90%E6%81%AF"
+    },
+    {
+      "name": "墨镜支援",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "戴上【墨镜】，呼叫好朋友火力支援，冷却时间20秒。",
+      "effect": "戴上【墨镜】，呼叫好朋友火力支援，冷却时间20秒。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%A2%A8%E9%95%9C%E6%94%AF%E6%8F%B4"
+    },
+    {
+      "name": "十万伏特",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "与宠物、随从、召唤物接近时持续对附近敌人降下闪电。",
+      "effect": "与宠物、随从、召唤物接近时持续对附近敌人降下闪电。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%8D%81%E4%B8%87%E4%BC%8F%E7%89%B9"
+    },
+    {
+      "name": "无尽能源",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "战斗时攻击有几率使伤害+4，并恢复20%已消耗的能量。",
+      "effect": "战斗时攻击有几率使伤害+4，并恢复20%已消耗的能量。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%97%A0%E5%B0%BD%E8%83%BD%E6%BA%90"
+    },
+    {
+      "name": "黑玫诅咒",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "标记击中的敌人，武器击中标记时对周围产生50%伤害。",
+      "effect": "标记击中的敌人，武器击中标记时对周围产生50%伤害。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%BB%91%E7%8E%AB%E8%AF%85%E5%92%92"
+    },
+    {
+      "name": "蓄势",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "击中敌人后1秒内造成的伤害会被吸收，之后16秒内击中敌人时造成被吸收伤害总量20%的额外伤害。",
+      "effect": "击中敌人后1秒内造成的伤害会被吸收，之后16秒内击中敌人时造成被吸收伤害总量20%的额外伤害。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%93%84%E5%8A%BF"
+    },
+    {
+      "name": "武器模仿",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "主武器模仿备用武器的攻击形态，持续1秒，冷却8秒。",
+      "effect": "主武器模仿备用武器的攻击形态，持续1秒，冷却8秒。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%AD%A6%E5%99%A8%E6%A8%A1%E4%BB%BF"
+    },
+    {
+      "name": "猴群召唤",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "召唤一群猴子。",
+      "effect": "召唤一群猴子。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%8C%B4%E7%BE%A4%E5%8F%AC%E5%94%A4"
+    },
+    {
+      "name": "元素扩散",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "站在元素范围内时，其半径和伤害逐渐增加，持续时间延长。",
+      "effect": "站在元素范围内时，其半径和伤害逐渐增加，持续时间延长。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E7%B4%A0%E6%89%A9%E6%95%A3"
+    },
+    {
+      "name": "静能储蓄",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "原地蓄力时间越长，暴击率越高。",
+      "effect": "原地蓄力时间越长，暴击率越高。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%9D%99%E8%83%BD%E5%82%A8%E8%93%84"
+    },
+    {
+      "name": "落音缤纷",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "连续攻击敌人时或敌人死亡时掉落音符，拾取后子弹大小+10%、移动速度+5%，持续3秒，效果可叠加至多3层。",
+      "effect": "连续攻击敌人时或敌人死亡时掉落音符，拾取后子弹大小+10%、移动速度+5%，持续3秒，效果可叠加至多3层。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%90%BD%E9%9F%B3%E7%BC%A4%E7%BA%B7"
+    },
+    {
+      "name": "爆竹召唤",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "释放技能时候会丢出一些爆竹，爆竹触碰到敌人便会爆炸，或一段时间后自行爆炸。",
+      "effect": "释放技能时候会丢出一些爆竹，爆竹触碰到敌人便会爆炸，或一段时间后自行爆炸。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%88%86%E7%AB%B9%E5%8F%AC%E5%94%A4"
+    },
+    {
+      "name": "毒素精通",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "中毒效果可以叠加至多3层",
+      "effect": "中毒效果可以叠加至多3层",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%AF%92%E7%B4%A0%E7%B2%BE%E9%80%9A"
+    },
+    {
+      "name": "破冰",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "对冰冻状态下的敌人，造成的伤害增加50%。",
+      "effect": "对冰冻状态下的敌人，造成的伤害增加50%。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%A0%B4%E5%86%B0"
+    },
+    {
+      "name": "冰冻延长",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "冰冻效果时间延长0.5秒。",
+      "effect": "冰冻效果时间延长0.5秒。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%86%B0%E5%86%BB%E5%BB%B6%E9%95%BF"
+    },
+    {
+      "name": "宠物召唤",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "当前每有100点蓝量，召唤1只随机宠物。",
+      "effect": "当前每有100点蓝量，召唤1只随机宠物。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AE%A0%E7%89%A9%E5%8F%AC%E5%94%A4"
+    },
+    {
+      "name": "宠物模仿",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "宠物会模仿你的攻击，冷却时间3秒。",
+      "effect": "宠物会模仿你的攻击，冷却时间3秒。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AE%A0%E7%89%A9%E6%A8%A1%E4%BB%BF"
+    },
+    {
+      "name": "吸血虫",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "防御-1，每6秒汲取周围敌人的血量。",
+      "effect": "防御-1，每6秒汲取周围敌人的血量。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%90%B8%E8%A1%80%E8%99%AB"
+    },
+    {
+      "name": "熟能生巧",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "同一房间内，每次使用技能后，技能伤害提升10%。",
+      "effect": "同一房间内，每次使用技能后，技能伤害提升10%。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%86%9F%E8%83%BD%E7%94%9F%E5%B7%A7"
+    },
+    {
+      "name": "激光折射",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "光电类武器命中时有30%几率折射3道激光。",
+      "effect": "光电类武器命中时有30%几率折射3道激光。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%BF%80%E5%85%89%E6%8A%98%E5%B0%84"
+    },
+    {
+      "name": "尖刺外壳",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "受到伤害时，释放一圈尖刺，最大生命值越高，尖刺伤害越高。",
+      "effect": "受到伤害时，释放一圈尖刺，最大生命值越高，尖刺伤害越高。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%B0%96%E5%88%BA%E5%A4%96%E5%A3%B3"
+    },
+    {
+      "name": "元素抵挡",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "每8秒抵挡一次元素效果",
+      "effect": "每8秒抵挡一次元素效果",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E7%B4%A0%E6%8A%B5%E6%8C%A1"
+    },
+    {
+      "name": "冰锥飞刺",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "冰元素伤害暴击时会向周围发射3冰锥。",
+      "effect": "冰元素伤害暴击时会向周围发射3冰锥。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%86%B0%E9%94%A5%E9%A3%9E%E5%88%BA"
+    },
+    {
+      "name": "冰雕爆破",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "敌人被冰元素伤害击杀时50%概率变成冰雕，会追着敌人爆炸，产生半径2的冰属性爆炸，给予敌人12冰元素伤害。",
+      "effect": "敌人被冰元素伤害击杀时50%概率变成冰雕，会追着敌人爆炸，产生半径2的冰属性爆炸，给予敌人12冰元素伤害。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%86%B0%E9%9B%95%E7%88%86%E7%A0%B4"
+    },
+    {
+      "name": "寒霜冰环",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "敌人被冰元素伤害击杀时有40%概率触发一个冰圈。",
+      "effect": "敌人被冰元素伤害击杀时有40%概率触发一个冰圈。",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AF%92%E9%9C%9C%E5%86%B0%E7%8E%AF"
+    },
+    {
+      "name": "巨枭魔宠",
+      "officialName": null,
+      "group": "特殊天赋",
+      "desc": "拥有一只巨枭魔宠，自身受到伤害会使巨枭消失一段时间【角色限定】",
+      "effect": "拥有一只巨枭魔宠，自身受到伤害会使巨枭消失一段时间【角色限定】",
+      "rarity": null,
+      "quality": null,
+      "data_type": "talent",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%B7%A8%E6%9E%AD%E9%AD%94%E5%AE%A0"
+    }
+  ],
+  "passives": [
+    {
+      "name": "破甲保护",
+      "character": "骑士",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%A0%B4%E7%94%B2%E4%BF%9D%E6%8A%A4"
+    },
+    {
+      "name": "暴击穿透",
+      "character": "游侠",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%9A%B4%E5%87%BB%E7%A9%BF%E9%80%8F"
+    },
+    {
+      "name": "元素精通",
+      "character": "法师",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E7%B4%A0%E7%B2%BE%E9%80%9A"
+    },
+    {
+      "name": "近战反弹",
+      "character": "刺客",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%BF%91%E6%88%98%E5%8F%8D%E5%BC%B9"
+    },
+    {
+      "name": "毒盾",
+      "character": "炼金术士",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%AF%92%E7%9B%BE"
+    },
+    {
+      "name": "火盾",
+      "character": "工程师",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%81%AB%E7%9B%BE"
+    },
+    {
+      "name": "击败回血",
+      "character": "吸血鬼",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%87%BB%E8%B4%A5%E5%9B%9E%E8%A1%80"
+    },
+    {
+      "name": "破甲冲击",
+      "character": "圣骑士",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%A0%B4%E7%94%B2%E5%86%B2%E5%87%BB"
+    },
+    {
+      "name": "蓄力加快",
+      "character": "精灵",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%93%84%E5%8A%9B%E5%8A%A0%E5%BF%AB"
+    },
+    {
+      "name": "刺盾",
+      "character": "狼人",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%88%BA%E7%9B%BE"
+    },
+    {
+      "name": "恢复强化",
+      "character": "牧师",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%81%A2%E5%A4%8D%E5%BC%BA%E5%8C%96"
+    },
+    {
+      "name": "随从强化",
+      "character": "德鲁伊",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%9A%8F%E4%BB%8E%E5%BC%BA%E5%8C%96"
+    },
+    {
+      "name": "激光加粗",
+      "character": "机器人",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%BF%80%E5%85%89%E5%8A%A0%E7%B2%97"
+    },
+    {
+      "name": "攻速加快",
+      "character": "狂战士",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%94%BB%E9%80%9F%E5%8A%A0%E5%BF%AB"
+    },
+    {
+      "name": "子弹减速",
+      "character": "死灵法师",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%AD%90%E5%BC%B9%E5%87%8F%E9%80%9F"
+    },
+    {
+      "name": "连击强化",
+      "character": "警官",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%BF%9E%E5%87%BB%E5%BC%BA%E5%8C%96"
+    },
+    {
+      "name": "武器浮游",
+      "character": "道士",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%AD%A6%E5%99%A8%E6%B5%AE%E6%B8%B8"
+    },
+    {
+      "name": "维度穿梭",
+      "character": "超界者",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%BB%B4%E5%BA%A6%E7%A9%BF%E6%A2%AD"
+    },
+    {
+      "name": "元能掌握",
+      "character": "古代元素使",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E8%83%BD%E6%8E%8C%E6%8F%A1"
+    },
+    {
+      "name": "巨枭魔宠",
+      "character": "枭首者",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%B7%A8%E6%9E%AD%E9%AD%94%E5%AE%A0"
+    },
+    {
+      "name": "天狗倒",
+      "character": "超时空忍者",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%A4%A9%E7%8B%97%E5%80%92"
+    },
+    {
+      "name": "特种精通",
+      "character": "特种骑士部队",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%89%B9%E7%A7%8D%E7%B2%BE%E9%80%9A"
+    },
+    {
+      "name": "内劲",
+      "character": "气宗",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%86%85%E5%8A%B2"
+    },
+    {
+      "name": "噩灵宿主",
+      "character": "恶魔术士",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%99%A9%E7%81%B5%E5%AE%BF%E4%B8%BB"
+    },
+    {
+      "name": "金盾",
+      "character": "矿工",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%87%91%E7%9B%BE"
+    },
+    {
+      "name": "尸爆",
+      "character": "陷阱大师",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%B0%B8%E7%88%86"
+    },
+    {
+      "name": "元素扩散",
+      "character": "皮套王子",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%83%E7%B4%A0%E6%89%A9%E6%95%A3"
+    },
+    {
+      "name": "雷暴",
+      "character": "博士",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%9B%B7%E6%9A%B4"
+    },
+    {
+      "name": "剑心",
+      "character": "剑宗",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%89%91%E5%BF%83"
+    },
+    {
+      "name": "一身是胆",
+      "character": "枪客",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E4%B8%80%E8%BA%AB%E6%98%AF%E8%83%86"
+    },
+    {
+      "name": "战意涌动",
+      "character": "领主",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%88%98%E6%84%8F%E6%B6%8C%E5%8A%A8"
+    },
+    {
+      "name": "静能储蓄",
+      "character": "咒法骑士",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%9D%99%E8%83%BD%E5%82%A8%E8%93%84"
+    },
+    {
+      "name": "星之咒",
+      "character": "占星师",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%98%9F%E4%B9%8B%E5%92%92"
+    },
+    {
+      "name": "格斗之魂",
+      "character": "武斗家",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%A0%BC%E6%96%97%E4%B9%8B%E9%AD%82"
+    },
+    {
+      "name": "森罗幻象",
+      "character": "戏法师",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%A3%AE%E7%BD%97%E5%B9%BB%E8%B1%A1"
+    },
+    {
+      "name": "落音缤纷",
+      "character": "吟游诗人",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E8%90%BD%E9%9F%B3%E7%BC%A4%E7%BA%B7"
+    },
+    {
+      "name": "愈战愈勇",
+      "character": "枪手",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%84%88%E6%88%98%E6%84%88%E5%8B%87"
+    },
+    {
+      "name": "充能协议",
+      "character": "机械姬",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%85%85%E8%83%BD%E5%8D%8F%E8%AE%AE"
+    },
+    {
+      "name": "爆炸狂欢",
+      "character": "船长",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E7%88%86%E7%82%B8%E7%8B%82%E6%AC%A2"
+    },
+    {
+      "name": "阴阳流转",
+      "character": "阴阳家",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E9%98%B4%E9%98%B3%E6%B5%81%E8%BD%AC"
+    },
+    {
+      "name": "枪械回响",
+      "character": "枪械专家",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E6%9E%AA%E6%A2%B0%E5%9B%9E%E5%93%8D"
+    },
+    {
+      "name": "地牢美食家",
+      "character": "厨娘",
+      "data_type": "passive",
+      "wikiPage": "https://yqqs.huijiwiki.com/wiki/%E5%9C%B0%E7%89%A2%E7%BE%8E%E9%A3%9F%E5%AE%B6"
+    }
+  ],
+  "matching": {
+    "max_hp": null,
+    "max_armor": "护甲+1",
+    "max_energy": null,
+    "eagle_eye": null,
+    "power_up": null,
+    "rapid_fire": "攻速加快",
+    "wind_step": null,
+    "long_shot": null,
+    "piercing_round": null,
+    "bouncing_round": "子弹弹射",
+    "fire_ench": null,
+    "ice_ench": null,
+    "poison_ench": null,
+    "lightning_ench": null,
+    "vampire": null,
+    "reaper": null,
+    "soul_energy": null,
+    "greed": null,
+    "gem_hunter": "宝石增加",
+    "bargain": "商店半价",
+    "magnet": null,
+    "quick_skill": "冷却加快",
+    "armor_regen": null,
+    "second_life": null,
+    "thorns": null,
+    "berserker": null,
+    "sniper_instinct": null,
+    "core_reactor": null,
+    "bullet_storm": null,
+    "treasure_seeker": null,
+    "survivor": null,
+    "fortress": null,
+    "hunter": null,
+    "crit_pierce": "暴击穿透",
+    "element_mastery": "元素精通",
+    "frost_guard": null,
+    "melee_reflect": "近战反弹",
+    "charge_speed": "蓄力加快",
+    "armor_break": "破甲冲击",
+    "soul_drain": null,
+    "treasure_hunter": null,
+    "absolute_defense": null,
+    "bullet_master": null,
+    "divine_archer": null,
+    "survival_expert": null,
+    "elemental_spread": "元素扩散",
+    "crit_energy": null,
+    "kill_haste": null,
+    "shield_thorns": null,
+    "ammo_recycle": null,
+    "frost_nova": null,
+    "flame_storm": null,
+    "thunder_chain": null,
+    "poison_cloud": null,
+    "life_drain": "击败回血",
+    "energy_surge": null,
+    "sprint": null,
+    "giant_slayer": null,
+    "last_stand": null,
+    "lucky_drop": null,
+    "precise_shot": null,
+    "armor_mastery": null,
+    "energy_cycle": null,
+    "melee_master": null,
+    "gun_master": null,
+    "survival_instinct": null,
+    "element_affinity": null,
+    "cold_blood": null,
+    "toxic_body": null,
+    "thunder_wrath": null,
+    "crit_boost": null,
+    "fire_rate_boost": "攻速加快",
+    "hp_boost": null,
+    "armor_boost": null,
+    "energy_boost": null,
+    "speed_boost": null,
+    "damage_boost": null,
+    "range_boost": null,
+    "cd_boost": "冷却加快",
+    "loot_boost": null
+  },
+  "matchingDetail": [
+    {
+      "existingId": "max_armor",
+      "existingName": "护甲上限",
+      "wikiName": "护甲+1",
+      "matchType": "synonym",
+      "note": "同义：护甲上限+1=护甲+1（同类固定 +1 护甲）"
+    },
+    {
+      "existingId": "rapid_fire",
+      "existingName": "疾速射击",
+      "wikiName": "攻速加快",
+      "matchType": "synonym",
+      "note": "同义：疾速射击=攻速提升（攻击速度提升）"
+    },
+    {
+      "existingId": "bouncing_round",
+      "existingName": "弹射弹",
+      "wikiName": "子弹弹射",
+      "matchType": "synonym",
+      "note": "同义：弹射弹=子弹弹射（子弹拥有弹射效果）"
+    },
+    {
+      "existingId": "gem_hunter",
+      "existingName": "宝石猎手",
+      "wikiName": "宝石增加",
+      "matchType": "synonym",
+      "note": "同义：宝石猎手=宝石矿工（宝石获取增加）"
+    },
+    {
+      "existingId": "bargain",
+      "existingName": "讨价还价",
+      "wikiName": "商店半价",
+      "matchType": "synonym",
+      "note": "同义：讨价还价=通通半价（商店折扣）"
+    },
+    {
+      "existingId": "quick_skill",
+      "existingName": "技能急速",
+      "wikiName": "冷却加快",
+      "matchType": "synonym",
+      "note": "同义：技能急速=冷却缩减（技能冷却降低）"
+    },
+    {
+      "existingId": "crit_pierce",
+      "existingName": "暴击穿透",
+      "wikiName": "暴击穿透",
+      "matchType": "exact-name"
+    },
+    {
+      "existingId": "element_mastery",
+      "existingName": "元素精通",
+      "wikiName": "元素精通",
+      "matchType": "exact-name"
+    },
+    {
+      "existingId": "melee_reflect",
+      "existingName": "近战反弹",
+      "wikiName": "近战反弹",
+      "matchType": "exact-name"
+    },
+    {
+      "existingId": "charge_speed",
+      "existingName": "蓄力加快",
+      "wikiName": "蓄力加快",
+      "matchType": "exact-name"
+    },
+    {
+      "existingId": "armor_break",
+      "existingName": "破甲冲击",
+      "wikiName": "破甲冲击",
+      "matchType": "exact-name"
+    },
+    {
+      "existingId": "elemental_spread",
+      "existingName": "元素扩散",
+      "wikiName": "元素扩散",
+      "matchType": "exact-name"
+    },
+    {
+      "existingId": "life_drain",
+      "existingName": "生命汲取",
+      "wikiName": "击败回血",
+      "matchType": "exact-official"
+    },
+    {
+      "existingId": "fire_rate_boost",
+      "existingName": "射速强化",
+      "wikiName": "攻速加快",
+      "matchType": "synonym",
+      "note": "同义：射速强化=攻速提升；与 rapid_fire 指向同一维基天赋，需去重"
+    },
+    {
+      "existingId": "cd_boost",
+      "existingName": "冷却强化",
+      "wikiName": "冷却加快",
+      "matchType": "synonym",
+      "note": "同义：冷却强化=冷却缩减（技能冷却降低）；与 quick_skill 指向同一维基天赋，需去重"
+    }
+  ],
+  "duplicates": [
+    {
+      "wikiName": "攻速加快",
+      "existingIds": [
+        "rapid_fire",
+        "fire_rate_boost"
+      ]
+    },
+    {
+      "wikiName": "冷却加快",
+      "existingIds": [
+        "quick_skill",
+        "cd_boost"
+      ]
+    }
+  ],
+  "possibleCandidates": [
+    {
+      "existingId": "max_hp",
+      "existingName": "生命上限",
+      "candidateWikiName": "生命+4",
+      "reason": "概念相近（生命上限），数值/形式不同"
+    },
+    {
+      "existingId": "max_energy",
+      "existingName": "能量上限",
+      "candidateWikiName": "能量+100",
+      "reason": "概念相近（能量上限），数值不同"
+    },
+    {
+      "existingId": "soul_energy",
+      "existingName": "灵魂汲取",
+      "candidateWikiName": "击败回蓝",
+      "reason": "同为击杀回能，但维基为掉落能量球、game 为直接回能"
+    },
+    {
+      "existingId": "armor_regen",
+      "existingName": "护甲再生",
+      "candidateWikiName": "破甲修复",
+      "reason": "均为护甲回复类，但触发方式不同（持续回复 vs 破盾回复）"
+    },
+    {
+      "existingId": "thorns",
+      "existingName": "荆棘之甲",
+      "candidateWikiName": "尖刺外壳",
+      "reason": "同为受击反伤/尖刺机制，维基为特殊天赋，需确认"
+    },
+    {
+      "existingId": "frost_guard",
+      "existingName": "冰霜护体",
+      "candidateWikiName": "冰盾",
+      "reason": "同为冰系护盾/防护概念，效果需逐条对照"
+    },
+    {
+      "existingId": "absolute_defense",
+      "existingName": "绝对防御",
+      "candidateWikiName": "护甲+1",
+      "reason": "包含护甲上限但为复合效果，不能整体等同"
+    },
+    {
+      "existingId": "last_stand",
+      "existingName": "背水一战",
+      "candidateWikiName": "生命+4",
+      "reason": "包含生命上限但为复合效果，不能整体等同"
+    },
+    {
+      "existingId": "precise_shot",
+      "existingName": "精准射击",
+      "candidateWikiName": "精准暴击",
+      "reason": "名称相近（精准射击 vs 精准打击），效果不完全一致"
+    },
+    {
+      "existingId": "crit_boost",
+      "existingName": "暴击强化",
+      "candidateWikiName": "精准暴击",
+      "reason": "同为暴击强化，但维基“精准打击”侧重精准+暴击"
+    },
+    {
+      "existingId": "hp_boost",
+      "existingName": "生命强化",
+      "candidateWikiName": "生命+4",
+      "reason": "概念相近（+生命上限），但维基为固定 +4、game 为 +2，需确认是否视为同一天赋"
+    },
+    {
+      "existingId": "armor_boost",
+      "existingName": "护甲强化",
+      "candidateWikiName": "护甲+1",
+      "reason": "概念相近（+护甲），但 game +2、维基 +1，需确认"
+    },
+    {
+      "existingId": "energy_boost",
+      "existingName": "能量强化",
+      "candidateWikiName": "能量+100",
+      "reason": "概念相近（+能量上限），数值不同（game +40 vs 维基 +100）"
+    },
+    {
+      "existingId": "loot_boost",
+      "existingName": "掉落强化",
+      "candidateWikiName": "宝石增加",
+      "reason": "部分同义（宝石获取），但还包含金币加成"
+    }
+  ]
+}

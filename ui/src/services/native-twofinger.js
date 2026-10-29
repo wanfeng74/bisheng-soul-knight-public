@@ -32,6 +32,17 @@ function loadTwoFingerNative() {
   if (!T) {
     try { if (typeof TwoFinger !== 'undefined') T = TwoFinger } catch (e) {}
   }
+  /* 原生模块导出层级在不同构建里可能是 {TwoFinger:{default:ctor}}；
+     逐层拆到构造器或已实例对象，避免把命名空间对象直接交给 createTwoFinger。 */
+  var guard = 0
+  while (T && guard < 4) {
+    guard++
+    if (typeof T === 'function') break
+    if (T.start && T.stop && T.poll && T.status && T.listDevices) break
+    if (T.TwoFinger && T.TwoFinger !== T) { T = T.TwoFinger; continue }
+    if (T.default && T.default !== T) { T = T.default; continue }
+    break
+  }
   if (T && T.TwoFinger) T = T.TwoFinger
   else if (T && T.default) T = T.default
   _tf = T || null

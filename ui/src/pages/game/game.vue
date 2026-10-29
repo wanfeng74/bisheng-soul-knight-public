@@ -112,6 +112,8 @@ import { applyRunResult } from '../../services/game/meta.js'
 import { load, save } from '../../services/save.js'
 import { readPhysical, logicalHeight } from '../../services/screen.js'
 import { mapTouchToLogical } from '../../services/touch-map.js'
+import { loadTwoFingerNative } from '../../services/native-twofinger.js'
+import { createTwoFinger } from '../../services/twofinger.js'
 import { sfx, bgmPlay, bgmStop, isSoundOn } from '../../services/sound.js'
 import { logInfo, logError } from '../../services/logger.js'
 
@@ -130,6 +132,8 @@ export default {
       joyActive: false,
       multiTouch: false,
       multiMoving: false,
+      nativeMulti: false,
+      tfCalib: { a: -0.0055, b: -1.0539, c: 979.4, d: 1.0449, e: -0.0023, f: 1.0 },
       multiOX: 0,
       multiOY: 0,
       joyOX: 0,
@@ -189,12 +193,15 @@ export default {
       if (!this.showPause) {
         try { this.engine.resume() } catch (eR) {}
       }
+      try { this._startNativeTwoFinger() } catch (eT) {}
     },
     onHide() {
       try { if (this.engine) this.engine.pause() } catch (e) {}
+      try { this._stopNativeTwoFinger() } catch (eT) {}
     },
     onUnload() {
       try { this._setBackSupport(true) } catch (eB1) {}
+      try { this._stopNativeTwoFinger(true) } catch (eT) {}
       this.stopLoop()
       if (this.toastTimer) { clearTimeout(this.toastTimer); this.toastTimer = null }
       if (this.engine) { try { this.engine.destroy() } catch (e) {} this.engine = null }
@@ -259,6 +266,7 @@ export default {
         var opts = {
           characterId: cid,
           upgrades: db.charUpgrades[cid] || {},
+          skillChoice: (db.skillChoices && db.skillChoices[cid]) || 0,
           seed: runOpts.seed || Date.now(),
           gems: db.gems,
           settings: db.settings
@@ -278,6 +286,7 @@ export default {
         try { bgmPlay('dungeon', 0.35) } catch (eB) {}
         self.hud = self.engine.getHud()
         self.startLoop()
+        try { self._startNativeTwoFinger() } catch (eT) {}
         try { logInfo('[game] start char=' + cid + ' seed=' + (runOpts.seed || '-')) } catch (eL) {}
       }).catch(function (e) {
         self.debugMsg = '存档读取失败: ' + (e && e.message)
@@ -287,52 +296,66 @@ export default {
       if (this.loopToken != null) return
       var self = this
       this.lastTs = Date.now()
-      this.loopToken = setInterval(function () {
-        var now = Date.now()
-        var dt = now - self.lastTs
-        self.lastTs = now
-        if (dt > 100) dt = 100
-        if (!self.engine) return
-        var hidden = false
-        try { hidden = $falcon.__gameHidden === true } catch (eH) {}
-        if (hidden) return
-        if (self.showPause) {
-          try { self.engine.render() } catch (eR) {}
-          return
-        }
+      var raf = function (fn) { return setTimeout(fn, 16) }
+      this._loopRaf = false
+      var tick = function () {
+        if (self.loopToken == null) return
         try {
-          self.engine.update(dt)
-          self.engine.render()
-        } catch (e) {
-          self.debugMsg = 'LOOP: ' + (e && e.message ? e.message : String(e))
-          try { logError('game loop: ' + (e && e.stack ? e.stack : e)) } catch (e2) {}
-        }
-        self.hudT += dt
-        if (self.hudT >= 100) {
-          self.hudT = 0
+          var now = Date.now()
+          var dt = now - self.lastTs
+          self.lastTs = now
+          if (dt > 100) dt = 100
+          if (!self.engine) return
+          var hidden = false
+          try { hidden = $falcon.__gameHidden === true } catch (eH) {}
+          if (hidden) return
+          if (self.showPause) {
+            try { self.engine.render() } catch (eR) {}
+            return
+          }
           try {
-            self.hud = self.engine.getHud()
-            self._syncBgm()
-            if (self.engine.run && self.engine.state === 'playing' &&
-                self.engine.run.floorIndex !== self.lastSavedFloor) {
-              self.lastSavedFloor = self.engine.run.floorIndex
-              self._saveCheckpoint()
-            }
-            if (self.hud.state !== 'playing' && self.hud.state !== 'floor_intro') {
-              self.engine.setMove(0, 0)
-              self.joyActive = false
-            }
-            if (self.hud.state === 'revive' || self.hud.state === 'buff_choice' || self.hud.state === 'shop') {
-              self.engine.setFire(false)
-            } else if (self.firing) {
-              self.engine.setFire(true)
-            }
-          } catch (e3) {}
+            self.engine.update(dt)
+            self.engine.render()
+          } catch (e) {
+            self.debugMsg = 'LOOP: ' + (e && e.message ? e.message : String(e))
+            try { logError('game loop: ' + (e && e.stack ? e.stack : e)) } catch (e2) {}
+          }
+          self.hudT += dt
+          if (self.hudT >= 100) {
+            self.hudT = 0
+            try {
+              self.hud = self.engine.getHud()
+              self._syncBgm()
+              if (self.engine.run && self.engine.state === 'playing' &&
+                  self.engine.run.floorIndex !== self.lastSavedFloor) {
+                self.lastSavedFloor = self.engine.run.floorIndex
+                self._saveCheckpoint()
+              }
+              if (self.hud.state !== 'playing' && self.hud.state !== 'floor_intro') {
+                self.engine.setMove(0, 0)
+                self.joyActive = false
+              }
+              if (self.hud.state === 'revive' || self.hud.state === 'buff_choice' || self.hud.state === 'shop') {
+                self.engine.setFire(false)
+              } else if (self.firing) {
+                self.engine.setFire(true)
+              }
+            } catch (e3) {}
+          }
+        } finally {
+          if (self.loopToken != null) self.loopToken = raf(tick)
         }
-      }, 16)
+      }
+      this.loopToken = raf(tick)
     },
     stopLoop() {
-      if (this.loopToken != null) { clearInterval(this.loopToken); this.loopToken = null }
+      if (this.loopToken != null) {
+        try {
+          if (this._loopRaf && typeof cancelAnimationFrame === 'function') cancelAnimationFrame(this.loopToken)
+          else clearTimeout(this.loopToken)
+        } catch (e0) {}
+        this.loopToken = null
+      }
     },
     _syncBgm() {
       var boss = this.hud && this.hud.boss
@@ -391,10 +414,160 @@ export default {
       }
       return out
     },
+    /* 原生双指：按 twofinger-jsapi 的 listDevices + start + touch 事件接入。
+     * 只有读到至少两个真实触点的帧才接管；单指仍走原 DOM 控件。 */
+    _startNativeTwoFinger() {
+      if (this._nativeTwoFinger) return
+      this._nativeTouchSeen = false
+      this._nativeEventCount = 0
+      this._nativeMoveLogged = false
+      var T = null
+      try { T = loadTwoFingerNative() } catch (e0) { T = null }
+      if (!T) {
+        try { logInfo('[game] twofinger native unavailable') } catch (eL) {}
+        return
+      }
+      var ctrl = null
+      try {
+        var native = (typeof T === 'function') ? new T() : T
+        ctrl = createTwoFinger(native, {
+          width: 960,
+          height: this.pageH || 287,
+          rotation: 90,
+          interval: 16,
+          maxEvents: 256
+        })
+        var list = ctrl.listDevices() || []
+        try {
+          var desc = []
+          for (var di = 0; di < list.length; di++) {
+            var dd = list[di] || {}
+            desc.push(String(dd.path || '?') + '{name=' + String(dd.name || '') +
+              ',supported=' + String(dd.supported) + ',typeB=' + String(dd.typeB) +
+              ',readable=' + String(dd.readable) + ',slots=' + String(dd.slots) + '}')
+          }
+          logInfo('[game] twofinger devices: ' + desc.join(' | '))
+        } catch (eLd) {}
+        var dev = null
+        for (var i = 0; i < list.length; i++) {
+          var d = list[i]
+          if (!d || !d.path) continue
+          if (d.readable === false || d.supported === false || d.typeB === false) continue
+          if (typeof d.slots === 'number' && d.slots < 2) continue
+          dev = d
+          break
+        }
+        if (!dev) {
+          try { ctrl.dispose() } catch (eD0) {}
+          try { logInfo('[game] twofinger no supported device') } catch (eL2) {}
+          return
+        }
+        var self = this
+        ctrl.on('touch', function (ev) { self._onNativeTouch(ev) })
+        ctrl.on('error', function (err) {
+          try { logInfo('[game] twofinger error ' + ((err && err.message) || err)) } catch (eL3) {}
+        })
+        ctrl.start(dev.path)
+        this._nativeTwoFinger = ctrl
+        this._nativeDevicePath = dev.path
+        try { logInfo('[game] twofinger start ' + dev.path) } catch (eL4) {}
+      } catch (eStart) {
+        var tinfo = ''
+        try {
+          tinfo = ' type=' + (typeof T)
+          if (T && typeof T === 'object') tinfo += ' keys=' + Object.keys(T).join(',')
+        } catch (eTi) {}
+        try { logInfo('[game] twofinger init failed: ' + ((eStart && eStart.message) || eStart) + tinfo) } catch (eL5) {}
+        try { if (ctrl) ctrl.dispose() } catch (eD1) {}
+      }
+    },
+    _stopNativeTwoFinger(dispose) {
+      var ctrl = this._nativeTwoFinger
+      this._nativeTwoFinger = null
+      this._nativeDevicePath = ''
+      this._nativeRelease()
+      if (!ctrl) return
+      try { if (ctrl.isRunning()) ctrl.stop() } catch (eS) {}
+      if (dispose) { try { ctrl.dispose() } catch (eD) {} }
+    },
+    _nativeRelease() {
+      if (!this.nativeMulti && !this.multiTouch) return
+      this.nativeMulti = false
+      this.multiTouch = false
+      this.multiMoving = false
+      this.joyActive = false
+      this.joyDX = 0
+      this.joyDY = 0
+      if (this.engine) this.engine.setMove(0, 0)
+    },
+    _onNativeTouch(ev) {
+      if (!this.engine || !ev) return
+      if (ev.type === 'cancel') { this._nativeRelease(); return }
+      var ts = ev.touches || []
+      if (!this._nativeTouchSeen) {
+        this._nativeTouchSeen = true
+        try { logInfo('[game] twofinger touch first type=' + ev.type + ' n=' + ts.length) } catch (eT0) {}
+      }
+      this._nativeEventCount = (this._nativeEventCount || 0) + 1
+      if (this._nativeEventCount <= 24) {
+        try {
+          var ps = []
+          for (var pi = 0; pi < ts.length; pi++) ps.push('(' + Math.round(ts[pi].x) + ',' + Math.round(ts[pi].y) + ')')
+          logInfo('[game] twofinger ev ' + ev.type + ' n=' + ts.length + ' ' + ps.join(' '))
+        } catch (eT1) {}
+      }
+      if (ts.length < 2) {
+        if (this.nativeMulti) this._nativeRelease()
+        return
+      }
+      /* 三角洲同款 sitronix 279x935 校准矩阵：screen = c + a*rawX + b*rawY */
+      var cal = this.tfCalib
+      if (cal) {
+        for (var ci = 0; ci < ts.length; ci++) {
+          var tp = ts[ci]
+          if (!tp || tp.rawX == null || tp.rawY == null) continue
+          var sx = cal.c + cal.a * tp.rawX + cal.b * tp.rawY
+          var sy = cal.f + cal.d * tp.rawX + cal.e * tp.rawY
+          tp.x = sx < 0 ? 0 : (sx > 960 ? 960 : sx)
+          tp.y = sy < 0 ? 0 : (sy > (this.pageH || 287) ? (this.pageH || 287) : sy)
+        }
+      }
+      var sorted = ts.slice().sort(function (a, b) { return a.x - b.x })
+      var left = sorted[0]
+      var right = sorted[sorted.length - 1]
+      if (!left || !right) return
+      var max = Math.max(34, Math.round(this._joySize() * 0.5))
+      if (!this.nativeMulti) {
+        this.nativeMulti = true
+        this.multiTouch = true
+        this.multiMoving = true
+        this.joyActive = true
+        this.joyOX = left.x
+        this.joyOY = left.y
+        this.multiOX = left.x
+        this.multiOY = left.y
+        this.joyDX = 0
+        this.joyDY = 0
+        try { logInfo('[game] twofinger multi ON left=(' + Math.round(left.x) + ',' + Math.round(left.y) + ') right=(' + Math.round(right.x) + ',' + Math.round(right.y) + ')') } catch (eM) {}
+      }
+      var dx = left.x - this.joyOX
+      var dy = left.y - this.joyOY
+      var l = Math.sqrt(dx * dx + dy * dy)
+      if (l > max) { dx = dx / l * max; dy = dy / l * max }
+      this.joyDX = dx
+      this.joyDY = dy
+      this._updateJoyStyle()
+      this.engine.setMove(dx / max, dy / max)
+      if (!this._nativeMoveLogged) {
+        this._nativeMoveLogged = true
+        try { logInfo('[game] twofinger move dx=' + Math.round(dx) + ' dy=' + Math.round(dy) + ' max=' + max) } catch (eMv) {}
+      }
+      if (!this.firing) { this.firing = true; this.engine.setFire(true) }
+    },
     /* DOM 双指降级：两指同时按住时，左半屏走摇杆、右半屏下侧持续开火。
-     * Falcon 的原生双指需要 libjsapi_twofinger 完整库；库缺失/未启用时这段保证
-     * 至少能“左手移动 + 右手开火”，且不会影响原有单指按钮。 */
+     * 原生双指可用时优先原生；原生不可用才走这里。 */
     multiStart(e) {
+      if (this.nativeMulti) return
       var n = 0
       try { n = e.touches ? e.touches.length : 0 } catch (e0) {}
       if (n >= 2) {
@@ -407,6 +580,7 @@ export default {
       }
     },
     multiMove(e) {
+      if (this.nativeMulti) return
       var n = 0
       try { n = e.touches ? e.touches.length : 0 } catch (e0) {}
       if (this.multiTouch || n >= 2) {
@@ -417,6 +591,7 @@ export default {
       }
     },
     multiEnd(e) {
+      if (this.nativeMulti) return
       var n = 0
       try { n = e.touches ? e.touches.length : 0 } catch (e0) {}
       if (this.multiTouch) {

@@ -57,6 +57,7 @@ export function installCombat(Game) {
     if (p.fireCd > 0) p.fireCd -= dt
     if (p.skillCd > 0) p.skillCd -= dt
     if (p.dualWieldT > 0) p.dualWieldT -= dt
+    if (p.transformT > 0) p.transformT -= dt
     if (p.hitFlash > 0) p.hitFlash -= dt
     if (p.energyWarnT > 0) p.energyWarnT -= dt
     /* 护甲回复 */
@@ -216,6 +217,7 @@ export function installCombat(Game) {
       if (count > 1) ang = baseAng - totalSpread / 2 + totalSpread * (i / (count - 1))
       else if (totalSpread > 0) ang = baseAng + (this.rng() - 0.5) * totalSpread
       var dmg = def.dmg * (this.mods.damageMul || 1)
+      if (p.transformT > 0) dmg *= 1.25
       if (p.passiveType === 'gun') dmg *= 1.10
       var isCrit = this.rng() * 100 < ((p.crit || 0) + (def.critBonus || 0))
       if (isCrit) dmg *= 2
@@ -247,6 +249,7 @@ export function installCombat(Game) {
     var arc = def.arc || 1.9
     var base = Math.atan2(ay, ax)
     var dmg = def.dmg * (this.mods.damageMul || 1)
+    if (p.transformT > 0) dmg *= 1.25
     if (p.passiveType === 'melee') dmg *= 1.12
     if (p.passive === '破甲冲击') dmg += 1
     this.effects.push({
@@ -283,6 +286,7 @@ export function installCombat(Game) {
       if (this.isSolidPx(bx, by)) { end.x = bx; end.y = by; break }
     }
     var dmg = def.dmg * (this.mods.damageMul || 1)
+    if (p.transformT > 0) dmg *= 1.25
     var isCrit = this.rng() * 100 < ((p.crit || 0) + (def.critBonus || 0))
     var hit = 0
     for (var i = 0; i < this.enemies.length; i++) {
@@ -504,7 +508,8 @@ export function installCombat(Game) {
     var radius = def.radius || 10
     if (elite) {
       var es = eliteScale()
-      hp *= es.hp
+      if (def.eliteHp) hp = def.eliteHp * mul
+      else hp *= es.hp
       dmg = dmg * es.dmg
       radius *= 1.25
     }
@@ -541,6 +546,7 @@ export function installCombat(Game) {
       e.maxHp = hp
       e.atkCd = this._enemyCd(1.6)
     }
+    if (boss) this._lastBossDef = def
     this.enemies.push(e)
     return e
   }
@@ -735,6 +741,8 @@ export function installCombat(Game) {
 
   Game.prototype._updateBoss = function (e, dt, p) {
     var def = e.def
+    if (e.shieldT > 0) e.shieldT = Math.max(0, e.shieldT - dt)
+    if (e.invulnT > 0) e.invulnT = Math.max(0, e.invulnT - dt)
     var d = Math.sqrt(dist2(e.x, e.y, p.x, p.y))
     var v = vecNorm(p.x - e.x, p.y - e.y)
     /* 阶段 */
@@ -812,6 +820,49 @@ export function installCombat(Game) {
       this._addParticles(e.x, e.y, '#b06bff', 12, 140)
       return
     }
+    if (name === 'burrow') {
+      var ba = this.rng() * Math.PI * 2
+      e.x = p.x + Math.cos(ba) * 70
+      e.y = p.y + Math.sin(ba) * 70
+      e.invulnT = 0.8
+      e.burrowT = 0.8
+      this.effects.push({ type: 'ring', x: e.x, y: e.y, r: 60, life: 0.8, maxLife: 0.8, color: color })
+      this._explode(e.x, e.y, 60, dmg, 'enemy', element)
+      this._sfx('skill')
+      return
+    }
+    if (name === 'shield') {
+      e.shieldT = 3
+      this.effects.push({ type: 'ring', x: e.x, y: e.y, r: e.r + 18, life: 0.8, maxLife: 0.8, color: '#7ee787' })
+      this._addFloat(e.x, e.y - e.r - 20, '护盾', '#7ee787')
+      this._sfx('skill')
+      return
+    }
+    if (name === 'meteor') {
+      for (i = 0; i < count; i++) {
+        var mx = p.x + (this.rng() - 0.5) * 120
+        var my = p.y + (this.rng() - 0.5) * 120
+        this.effects.push({ type: 'ring', x: mx, y: my, r: 34, life: 0.5, maxLife: 0.5, color: color })
+        this._spawnBullet(mx, my, 0, 0, {
+          owner: 'enemy', dmg: dmg, speed: 0, life: 0.5, size: 10,
+          color: color, element: element, explodeRadius: 56
+        })
+      }
+      this._sfx('skill')
+      return
+    }
+    if (name === 'laser') {
+      var baseA = angleOf(e.x, e.y, p.x, p.y)
+      for (i = 0; i < count; i++) {
+        var la = baseA + (i - (count - 1) / 2) * (pat.spread || 0.08)
+        this._spawnBullet(e.x, e.y, Math.cos(la), Math.sin(la), {
+          owner: 'enemy', dmg: dmg, speed: speed || 420, life: 1.6,
+          size: pat.radius || 5, color: color, element: element
+        })
+      }
+      this._sfx('shot_heavy')
+      return
+    }
     if (name === 'radial' || name === 'ice_shards' || name === 'sword_wave') {
       /* 和 3 发扇形子弹完全同一条路径：普通子弹 _spawnBullet，直接打出去 */
       for (i = 0; i < count; i++) {
@@ -882,8 +933,10 @@ export function installCombat(Game) {
 
   Game.prototype._damageEnemy = function (e, dmg, opts) {
     if (!e || e.dead) return
+    if (e.invulnT > 0) return
     opts = opts || {}
     var final = Math.max(1, Math.round(dmg))
+    if (e.shieldT > 0) final = Math.max(1, Math.round(final * 0.25))
     e.hp -= final
     this.damageDealt += final
     if (!opts.silent) {

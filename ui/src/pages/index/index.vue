@@ -3,7 +3,7 @@
     <div class="bg"></div>
     <div class="topbar">
       <text class="title">笔上元气骑士</text>
-      <text class="subtitle">像素地牢 · 九层冒险</text>
+      <text class="subtitle">四大章节 · 二十层地牢</text>
       <div class="topright">
         <div class="gem-box">
           <div class="gem-icon"></div>
@@ -22,8 +22,7 @@
       <scroller class="left-scroller" :style="{ height: mainH + 'px' }" scrollDirection="vertical">
         <div class="left-card">
           <div class="portrait-box">
-            <text class="portrait-mark">{{ charMark }}</text>
-            <image class="portrait-img" :src="portraitPath" mode="aspectFit"></image>
+            <image class="portrait-img" :key="portraitPath" :src="portraitPath" mode="aspectFit"></image>
           </div>
           <text class="char-name">{{ char.name }}</text>
           <text class="char-title">{{ char.title }}</text>
@@ -77,7 +76,7 @@
         </div>
         <div class="tips-panel">
             <text class="tips-title">冒险提示</text>
-            <text class="tips-line">三层为一章，共三大章节九层地牢，每章终点都有首领坐镇</text>
+            <text class="tips-line">四大章节、二十层，每五层一位首领</text>
             <text class="tips-line">清空房间、开启宝箱、在商店补给，击败首领后由传送门进入下一层</text>
             <text class="tips-line">倒下也会带回宝石：回大厅解锁新角色、升级六项能力</text>
           </div>
@@ -142,7 +141,7 @@ export default {
       version: nowVersion,
       charId: 'knight',
       charMark: '骑',
-      portraitPath: 'assets/portraits/knight.png',
+      portraitPath: 'assets/portraits/knight_wiki.png',
       char: { name: '骑士', title: '双持剑士', color: '#c9c9d8' },
       attrRows: [],
       statRows: [],
@@ -186,6 +185,10 @@ export default {
       try { this.playBgm() } catch (e3) {}
       try { this.loadDb() } catch (e4) {}
       try { this.rebuild() } catch (e5) {}
+      var _self = this
+      setTimeout(function () {
+        try { _self.loadDb(); _self.rebuild() } catch (e7) {}
+      }, 180)
       try { this.checkAppUpdate(true) } catch (e6) {}
     },
     updMeta() {
@@ -314,7 +317,7 @@ export default {
         color: c.color || '#c9c9d8'
       }
       this.charMark = String(c.name || cid).charAt(0) || '?'
-      this.portraitPath = 'assets/portraits/' + cid + '.png'
+      this.portraitPath = 'assets/portraits/' + cid + '_wiki.png'
       this.attrRows = [
         { label: '生命', value: String(hp) },
         { label: '护甲', value: String(armor) },
@@ -440,7 +443,7 @@ export default {
 .bg { position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; backgroundColor: #14121c; }
 .topbar { position: relative; width: 100vw; height: 12vh; flexDirection: row; alignItems: center; paddingLeft: 1.6vw; paddingRight: 1.6vw; borderBottomWidth: 2px; borderBottomColor: #2a2438; }
 .title { fontSize: 7.5vh; fontWeight: 700; color: #ffd93d; letterSpacing: 0.1vw; }
-.subtitle { fontSize: 4.4vh; color: #8d88a5; marginLeft: 1vw; marginTop: 1vh; }
+.subtitle { fontSize: 2.8vh; color: #8d88a5; marginLeft: 1vw; marginTop: 2vh; }
 .topright { flexDirection: row; alignItems: center; marginLeft: auto; }
 .gem-box { height: 9vh; flexDirection: row; alignItems: center; backgroundColor: #241d14; borderWidth: 2px; borderColor: #ffd93d; borderRadius: 0.8vh; paddingLeft: 0.9vw; paddingRight: 1vw; marginRight: 1vw; }
 .gem-icon { width: 1.8vw; height: 1.8vw; backgroundColor: #ffd93d; borderRadius: 0.8vh; marginRight: 0.5vw; }
@@ -489,7 +492,7 @@ export default {
 .tips-scroller { width: 100%; marginTop: 1vh; }
 .tips-panel { width: 100%; backgroundColor: #191523; borderWidth: 2px; borderColor: #2c2640; borderRadius: 1vh; paddingTop: 1vh; paddingBottom: 1vh; paddingLeft: 1.2vw; paddingRight: 1.2vw; flexDirection: column; }
 .tips-title { fontSize: 1.6vw; fontWeight: 700; color: #ffd93d; marginBottom: 0.6vh; }
-.tips-line { fontSize: 1.5vw; color: #b7b2cc; lineHeight: 6.6vh; marginBottom: 0.3vh; }
+.tips-line { fontSize: 1.35vw; color: #b7b2cc; marginBottom: 0.8vh; }
 .upd-mask { position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; backgroundColor: rgba(4,6,10,0.9); alignItems: center; justifyContent: center; zIndex: 200; }
 .upd-panel { width: 72vw; backgroundColor: #1b1726; borderWidth: 3px; borderColor: #ffd93d; borderRadius: 1.2vh; paddingTop: 1.6vh; paddingBottom: 1.6vh; paddingLeft: 2vw; paddingRight: 2vw; flexDirection: column; alignItems: center; }
 .upd-title { fontSize: 7vh; fontWeight: 700; color: #ffd93d; lineHeight: 8.4vh; }

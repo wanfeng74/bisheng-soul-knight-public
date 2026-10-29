@@ -1,0 +1,44 @@
+node_modules/
+.falcon_/
+.falcon_tmp/
+.temp/
+syncheck/
+*.amr
+amr-inspect/
+dl/
+*.png
+# 真机界面截图 (README 展示用)
+!screenshots/*.png
+# 应用图标
+!ui/icon.png
+# 游戏内物品/UI/角色贴图
+!ui/assets/icons/*.png
+!ui/assets/portraits/*.png
+!docs/*.png
+
+out/
+*.log
+build/
+.temp/
+
+# 本地测试脚本 (不随仓库发布)
+test/
+*.bak*
+*.v2110bak
+
+# 本地临时编译工程 (glibc bridge 交叉编译)
+.tmp-jsapi-glibc-build/
+.archive-libs/
+
+# 服务端运行时数据/密钥/发包产物，不入库
+server/pkg/
+server/backups/
+server/*.db
+server/*.key
+server/*.log
+server/*.tar.gz
+server/*.zip
+server/*.amr
+
+# 含旧服务端明文密码的本地校验脚本，绝不入库
+tools/_verify_119.mjs

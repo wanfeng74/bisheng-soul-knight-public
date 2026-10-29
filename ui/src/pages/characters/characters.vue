@@ -19,9 +19,9 @@
     </div>
     <div class="body">
       <scroller class="main-scroller" :style="{ height: scrollerH + 'px' }" scrollDirection="vertical">
-        <div class="scroll-inner">
+        <div class="scroll-inner" @touchstart="onTouchStart" @touchmove="onTouchMove">
           <div class="card-grid">
-            <div v-for="(c, ci) in charCards" :key="c.id" class="char-card" :class="c.selected ? 'card-on' : (c.locked ? 'card-locked' : 'card-off')" @touchstart="pickChar(c.id)" @click="pickChar(c.id)" @tap="pickChar(c.id)">
+            <div v-for="(c, ci) in charCards" :key="c.id" class="char-card" :class="c.selected ? 'card-on' : (c.locked ? 'card-locked' : 'card-off')" @click="pickChar(c.id)" @tap="pickChar(c.id)">
               <div class="card-portrait">
                 <text class="card-mark">{{ c.mark }}</text>
                 <image class="card-img" :src="c.portrait" mode="aspectFit"></image>
@@ -51,11 +51,22 @@
                   <text class="skill-name">技能 · {{ skillName }}</text>
                   <text class="skill-desc">{{ skillDesc }}</text>
                   <text class="skill-cd">冷却 {{ skillCd }} 秒</text>
+                  <text class="skill-cd">技能组：{{ skillListText }}</text>
+                  <div class="skill-picks">
+                    <div v-for="(s, si) in skillDetails" :key="'pick' + si" :class="selectedSkill === si ? 'skill-pick skill-pick-on' : 'skill-pick'" @click="pickSkill(si)">
+                      <text class="skill-pick-text">{{ si + 1 }}</text>
+                    </div>
+                  </div>
+                  <div class="skill-detail" v-for="(s, si) in skillDetails" :key="'sk' + si">
+                    <text class="skill-detail-name">{{ si + 1 }}. {{ s.name }}{{ s.cd ? ' · ' + s.cd + 's' : '' }}</text>
+                    <text class="skill-detail-desc">{{ s.desc }}</text>
+                  </div>
                 </div>
                 <div class="weapon-row">
                   <text class="weapon-label">被动</text>
                   <text class="weapon-name" style="color:#7ee787">{{ passiveName }}</text>
                 </div>
+                <text v-if="passiveDesc" class="passive-desc">{{ passiveDesc }}</text>
                 <div class="weapon-row">
                   <text class="weapon-label">起始武器</text>
                   <text class="weapon-name" :style="{ color: starterColor }">{{ starterName }}</text>
@@ -72,7 +83,7 @@
                   <div v-if="u.maxed" class="up-done">
                     <text class="up-done-text">满</text>
                   </div>
-                  <div v-else class="up-btn" @touchstart="buyUpgrade(u.id)" @click="buyUpgrade(u.id)" @tap="buyUpgrade(u.id)">
+                  <div v-else class="up-btn" @click="buyUpgrade(u.id)" @tap="buyUpgrade(u.id)">
                     <text class="up-btn-text">+</text>
                   </div>
                 </div>
@@ -130,7 +141,11 @@ export default {
       skillName: '双持',
       skillDesc: '',
       skillCd: 12,
+      skillListText: '',
+      skillDetails: [],
+      selectedSkill: 0,
       passiveName: '—',
+      passiveDesc: '',
       starterName: '旧式手枪',
       starterColor: '#c8ccd4',
       upgrades: [],
@@ -204,7 +219,7 @@ export default {
           name: info.name || id,
           title: info.title || '',
           mark: String(info.name || id).charAt(0),
-          portrait: 'assets/portraits/' + id + '.png',
+          portrait: 'assets/portraits/' + id + '_wiki.png',
           locked: isLocked,
           cost: (typeof info.unlockCost === 'number') ? info.unlockCost : 0,
           selected: id === cur
@@ -230,11 +245,26 @@ export default {
         { label: '暴击', value: (info.crit || 0) + '%' },
         { label: '移速', value: Math.round((info.speed || 1) * 100) + '%' }
       ]
+      if (typeof info.hand === 'number') this.baseRows.push({ label: '手刀', value: String(info.hand) })
       var sk = info.skill || {}
       this.skillName = sk.name || '未知技能'
       this.skillDesc = sk.desc || ''
       this.skillCd = (typeof sk.cd === 'number') ? sk.cd : 0
+      this.skillListText = (info.wikiSkills && info.wikiSkills.length) ? info.wikiSkills.join(' / ') : this.skillName
+      this.skillDetails = []
+      if (info.wikiSkillData && info.wikiSkillData.length) {        for (var si = 0; si < info.wikiSkillData.length; si++) {
+          var sd = info.wikiSkillData[si] || {}
+          this.skillDetails.push({
+            name: sd.name || '—',
+            desc: sd.desc || '',
+            cd: (typeof sd.cooldown === 'number') ? String(sd.cooldown) : ''
+          })
+        }
+      }
+      var chosen = (this.db && this.db.skillChoices && this.db.skillChoices[cid]) || 0
+      this.selectedSkill = (chosen >= 0 && chosen < this.skillDetails.length) ? chosen : 0
       this.passiveName = info.passive || '—'
+      this.passiveDesc = info.passiveDesc || ''
       var w = {}
       try { w = (WEAPONS && WEAPONS[info.starterWeapon]) || {} } catch (eW) { w = {} }
       this.starterName = info.starterWeaponName || w.name || '—'
@@ -279,6 +309,15 @@ export default {
       }
       this.upgrades = rows
     },
+    pickSkill(idx) {
+      if (this._dedupe()) return
+      if (this._touchMoved) return
+      if (idx < 0 || idx >= this.skillDetails.length) return
+      this.selectedSkill = idx
+      if (!this.db.skillChoices) this.db.skillChoices = {}
+      this.db.skillChoices[this.sel.id] = idx
+      this.saveDb()
+    },
     saveDb() {
       try {
         var p = save(this.db)
@@ -308,9 +347,25 @@ export default {
         if (typeof this.setTimeout === 'function') this._msgTimer = this.setTimeout(fn, 2200)
       } catch (e3) {}
     },
+    /* 记录手指是否在滚动：滚动后不触发卡片/购买点击 */
+    onTouchStart(e) {
+      this._touchMoved = false
+      try {
+        var t = (e && e.touches && e.touches[0]) || (e && e.changedTouches && e.changedTouches[0])
+        this._touchStartY = t ? Number(t.clientY || t.pageY || 0) : 0
+      } catch (e0) { this._touchStartY = 0 }
+    },
+    onTouchMove(e) {
+      try {
+        var t = (e && e.touches && e.touches[0]) || (e && e.changedTouches && e.changedTouches[0])
+        var y = t ? Number(t.clientY || t.pageY || 0) : 0
+        if (Math.abs(y - (this._touchStartY || 0)) > 8) this._touchMoved = true
+      } catch (e1) { this._touchMoved = true }
+    },
     /* 点击卡片：已解锁 = 切换出战；未解锁 = 扣宝石解锁并直接选中 */
     pickChar(id) {
       if (this._dedupe()) return
+      if (this._touchMoved) return
       try {
         var info = (CHARACTERS && CHARACTERS[id]) || {}
         var unlocked = (this.db.unlockedChars || []).indexOf(id) >= 0
@@ -342,6 +397,9 @@ export default {
     /* 点击「+」：扣宝石升一级并落盘 */
     buyUpgrade(statId) {
       if (this._dedupe()) return
+      if (this._touchMoved) return
+      if (Date.now() - (this._lastBuyAt || 0) < 500) return
+      this._lastBuyAt = Date.now()
       try {
         var cid = this.selected
         var row = null
@@ -435,22 +493,30 @@ export default {
 .detail-left { width: 33vw; flexDirection: column; marginRight: 1.2vw; }
 .section-title { fontSize: 1.78vw; fontWeight: 700; color: #4fc3f7; marginBottom: 0.8vh; }
 .stat-row { width: 100%; height: auto; paddingTop: 0.5vh; paddingBottom: 0.5vh; flexDirection: row; alignItems: center; justifyContent: space-between; backgroundColor: #201a2e; borderRadius: 0.5vh; paddingLeft: 0.7vw; paddingRight: 0.7vw; marginBottom: 0.5vh; }
-.stat-label { width: 52%; fontSize: 1.47vw; color: #8f89a8; lineHeight: 6vh; }
-.stat-value { width: 48%; fontSize: 1.71vw; fontWeight: 600; color: #ffd93d; textAlign: right; lineHeight: 6vh; }
+.stat-label { width: 52%; fontSize: 1.47vw; color: #8f89a8; marginBottom: 0.6vh; }
+.stat-value { width: 48%; fontSize: 1.71vw; fontWeight: 600; color: #ffd93d; textAlign: right; marginBottom: 0.6vh; }
 .skill-box { width: 100%; height: auto; backgroundColor: #201a2e; borderWidth: 2px; borderColor: #3a3352; borderRadius: 0.7vh; paddingTop: 0.9vh; paddingBottom: 0.9vh; paddingLeft: 0.8vw; paddingRight: 0.8vw; flexDirection: column; marginTop: 0.8vh; }
 .skill-name { fontSize: 1.71vw; fontWeight: 600; color: #ffd93d; }
-.skill-desc { fontSize: 1.4vw; color: #b7b2cc; marginTop: 0.4vh; lineHeight: 6.6vh; }
+.skill-desc { fontSize: 1.4vw; color: #b7b2cc; marginTop: 0.4vh; marginBottom: 0.6vh; }
 .skill-cd { fontSize: 1.32vw; color: #7d7893; marginTop: 0.4vh; }
+.skill-detail { width: 100%; height: auto; marginTop: 0.6vh; paddingTop: 0.4vh; borderTopWidth: 1px; borderTopColor: #3a3352; flexDirection: column; }
+.skill-detail-name { fontSize: 1.4vw; fontWeight: 700; color: #c8ccd4; }
+.skill-detail-desc { fontSize: 1.28vw; color: #8f89a8; marginTop: 0.2vh; marginBottom: 0.8vh; }
+.skill-picks { width: 100%; height: auto; flexDirection: row; marginTop: 0.6vh; }
+.skill-pick { width: 5vh; height: 4.6vh; borderRadius: 0.6vh; backgroundColor: #2a2440; borderWidth: 1px; borderColor: #4a4366; alignItems: center; justifyContent: center; marginRight: 0.8vh; }
+.skill-pick-on { backgroundColor: #ffd93d; borderColor: #ffd93d; }
+.skill-pick-text { fontSize: 1.5vw; fontWeight: 700; color: #d8d4e8; }
 .weapon-row { width: 100%; height: auto; paddingTop: 0.6vh; paddingBottom: 0.6vh; flexDirection: row; alignItems: center; backgroundColor: #201a2e; borderRadius: 0.6vh; paddingLeft: 0.7vw; paddingRight: 0.7vw; marginTop: 0.8vh; }
 .weapon-label { fontSize: 1.47vw; color: #8f89a8; marginRight: 0.6vw; }
 .weapon-name { fontSize: 1.71vw; fontWeight: 700; color: #c8ccd4; }
+.passive-desc { width: 100%; height: auto; fontSize: 1.28vw; color: #8f89a8; marginBottom: 0.8vh; marginTop: 0.2vh; paddingLeft: 0.7vw; paddingRight: 0.7vw; }
 .detail-right { flex: 1; flexDirection: column; }
 .up-row { height: auto; paddingTop: 0.8vh; paddingBottom: 0.8vh; flexDirection: row; alignItems: center; backgroundColor: #201a2e; borderWidth: 2px; borderColor: #332d48; borderRadius: 0.7vh; paddingLeft: 0.8vw; paddingRight: 0.8vw; marginBottom: 0.7vh; }
-.up-name { width: 9vw; fontSize: 1.63vw; fontWeight: 600; color: #e8e4f5; lineHeight: 6vh; }
-.up-lv { width: 9vw; fontSize: 1.55vw; color: #4fc3f7; lineHeight: 6vh; }
-.up-fmt { width: 10vw; fontSize: 1.55vw; color: #7ee787; lineHeight: 6vh; }
-.up-cost { width: 9vw; fontSize: 1.47vw; color: #ffd93d; lineHeight: 6vh; }
-.up-max { width: 9vw; fontSize: 1.47vw; color: #6b6880; lineHeight: 6vh; }
+.up-name { width: 9vw; fontSize: 1.63vw; fontWeight: 600; color: #e8e4f5; marginBottom: 0.6vh; }
+.up-lv { width: 9vw; fontSize: 1.55vw; color: #4fc3f7; marginBottom: 0.6vh; }
+.up-fmt { width: 10vw; fontSize: 1.55vw; color: #7ee787; marginBottom: 0.6vh; }
+.up-cost { width: 9vw; fontSize: 1.47vw; color: #ffd93d; marginBottom: 0.6vh; }
+.up-max { width: 9vw; fontSize: 1.47vw; color: #6b6880; marginBottom: 0.6vh; }
 .up-btn { width: 10vw; height: 12vh; backgroundColor: #4fc3f7; borderRadius: 0.7vh; alignItems: center; justifyContent: center; marginLeft: auto; }
 .up-btn-text { fontSize: 6.5vh; fontWeight: 700; color: #0b1a22; }
 .up-done { width: 10vw; height: 12vh; backgroundColor: #2a2438; borderRadius: 0.7vh; alignItems: center; justifyContent: center; marginLeft: auto; }

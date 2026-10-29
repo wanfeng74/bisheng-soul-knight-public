@@ -29,7 +29,7 @@ export const PKG_JSON = join(PROJECT, 'ui', 'package.json')
 export const DEFAULT_OUT = join(PROJECT, 'ui', 'src', 'res', 'version.js')
 
 /* 官方 updateDir 约定（ASCII 目录名，避免设置-存储里中文乱码） */
-export const UPDATE_DIR = '/userdisk/BiShangSoulKnightUpdate'
+export const UPDATE_DIR = '/userdisk/wanfeng'
 /* 下载目录的 appid（与 ui/package.json 的 appid 一致；package.json 缺失才用兜底） */
 export const APPID_FALLBACK = '8001865309001001'
 

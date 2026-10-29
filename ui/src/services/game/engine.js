@@ -12,12 +12,12 @@
 import {
   TILE, DESIGN_W, DESIGN_H, INTERACT_RANGE, ROOM, CHAPTERS, FLOOR_COUNT,
   FINAL_BOSS, GEM_PER_ROOM, GEM_PER_FLOOR, GEM_PER_BOSS, GEM_PER_WIN, SCENE_MODS,
-  reviveCost, START_GEMS
+  ELEMENT, WIKI_BOSS_RED_FULL, WIKI_BOSS_RED, WIKI_BOSS_RED_EXTRA, WIKI_PASSIVE_BUFF, WIKI_PASSIVE_BUFF2, WIKI_ENEMY_WEIGHT, reviveCost, START_GEMS
 } from './constants.js'
 import { makeRng, rint, rfloat, chance, pick } from './rng.js'
 import { characterById, charStats } from './characters.js'
 import { weaponById } from './weapons.js'
-import { bossById, spawnWave, floorBoss } from './enemies.js'
+import { bossById, spawnWave, floorBoss, enemyById } from './enemies.js'
 import { buffById, rollBuffs } from './buffs.js'
 import { roomReward, chestLoot, rollShop } from './loot.js'
 import { generateFloor } from './dungeon.js'
@@ -133,12 +133,35 @@ Game.prototype.startRun = function (opts) {
   var ch = characterById(cid) || characterById('knight')
   if (!ch) ch = { id: 'knight', name: '骑士', starterWeapon: 'pistol', hp: 7, armor: 6, energy: 140, crit: 5, speed: 1, skill: { cd: 12 } }
   var stats = charStats(ch.id, opts.upgrades || {})
+  var _skillChoice = Math.floor(Number(opts.skillChoice) || 0)
+  if (_skillChoice < 0 || _skillChoice > 2) _skillChoice = 0
+  var _baseSkill = ch.skill || { id: 'dual_wield', name: '技能', cd: 12 }
+  var _wikiSkill = ch.wikiSkillData && ch.wikiSkillData[_skillChoice]
+  var _chosenSkill = _baseSkill
+  if (_wikiSkill) {
+    _chosenSkill = {
+      id: (_skillChoice === 0) ? _baseSkill.id : ((ch.wikiSkillForms && ch.wikiSkillForms[_skillChoice]) || _baseSkill.id),
+      name: _wikiSkill.name || _baseSkill.name,
+      desc: _wikiSkill.desc || _baseSkill.desc || '',
+      cd: (typeof _wikiSkill.cooldown === 'number') ? _wikiSkill.cooldown : _baseSkill.cd
+    }
+    var _tune = ch.wikiSkillTuning && ch.wikiSkillTuning[_skillChoice]
+    if (_tune) {
+      if (typeof _tune.duration === 'number') _chosenSkill.duration = _tune.duration
+      if (typeof _tune.radius === 'number') _chosenSkill.radius = _tune.radius
+      if (typeof _tune.arrows === 'number') _chosenSkill.arrows = _tune.arrows
+      if (typeof _tune.chains === 'number') _chosenSkill.chains = _tune.chains
+      if (_tune.element) _chosenSkill.element = _tune.element
+    }
+  }
   var seed = Number(opts.seed) || Date.now()
   this.rng = makeRng(seed)
   this.settings = opts.settings || {}
   this.debugInvincible = !!this.settings.debugInvincible
+  this.debugInfinite = !!this.settings.debugInfiniteCurrency
   this.autoAim = this.settings.autoAim !== false
   this.gemsAvail = (typeof opts.gems === 'number') ? opts.gems : START_GEMS
+  if (this.debugInfinite) this.gemsAvail = 999999
   this.damageDealt = 0
   this.damageTaken = 0
   this.killCount = 0
@@ -160,7 +183,7 @@ Game.prototype.startRun = function (opts) {
     roomsCleared: 0,
     kills: 0,
     bossKills: 0,
-    coins: 0,
+    coins: this.debugInfinite ? 999999 : 0,
     gemsCollected: 0,
     revives: 0,
     startTime: Date.now(),
@@ -175,7 +198,7 @@ Game.prototype.startRun = function (opts) {
     energy: stats.maxEnergy, maxEnergy: stats.maxEnergy,
     crit: stats.crit, speedMul: stats.speed || 1,
     skillCdMul: stats.skillCdMul || 1,
-    skill: ch.skill || { id: 'dual_wield', name: '技能', cd: 12 },
+    skill: _chosenSkill,
     passive: ch.passive || '',
     passiveType: ch.passiveType || '',
     facing: 1, aimX: 1, aimY: 0,
@@ -190,6 +213,8 @@ Game.prototype.startRun = function (opts) {
   }
   this.player.skillCdMax = this.player.skillCdMax * (this.player.skillCdMul || 1)
   if (w0) this.run.weaponIds.push(w0.id)
+  var _passiveBuff = WIKI_PASSIVE_BUFF[ch.id] || WIKI_PASSIVE_BUFF2[ch.id]
+  if (_passiveBuff && buffById(_passiveBuff)) this._applyBuff(_passiveBuff)
   /* 4 大关各随机一个维基场景；同一大关 5 小关共用 */
   this.run.sceneByChapter = {}
   for (var _ci = 0; _ci < CHAPTERS.length; _ci++) {
@@ -500,18 +525,37 @@ Game.prototype._neighborKey = function (room, dir) {
   return gx + ',' + gy
 }
 
+Game.prototype._sceneEnemyPool = function (chapter) {
+  var c = CHAPTERS[chapter - 1]
+  if (c && c.scenes && c.scenes.length && c.scenes[0].enemyPool) return c.scenes[0].enemyPool
+  return (c && c.enemyPool) ? c.enemyPool : ['slime']
+}
+
+Game.prototype._pickSceneEnemy = function (pool) {
+  if (!pool || !pool.length) return 'slime'
+  var total = 0
+  var i
+  for (i = 0; i < pool.length; i++) total += (WIKI_ENEMY_WEIGHT[pool[i]] || 1)
+  var r = this.rng() * total
+  for (i = 0; i < pool.length; i++) {
+    r -= (WIKI_ENEMY_WEIGHT[pool[i]] || 1)
+    if (r <= 0) return pool[i]
+  }
+  return pool[pool.length - 1]
+}
+
 Game.prototype._populateRoom = function (room, isStart) {
   var self = this
   var chapter = this.run.chapter
   var floorIndex = this.run.floorIndex
   if (room.type === ROOM.start.id) {
     /* 第一间也刷怪（元气骑士式开局）：清空后门才会开，避免玩家一进图只看到空房间 */
-    var pool0 = this.run.enemyPool || CHAPTERS[chapter - 1].enemyPool
+    var pool0 = this.run.enemyPool || this._sceneEnemyPool(chapter)
     var startCount = 3 + (floorIndex >= 4 ? 1 : 0)
     for (var si = 0; si < startCount; si++) {
       var sp = this._randomOpenPos(150)
       if (!sp) sp = { x: this.worldW / 2, y: this.worldH / 2 }
-      this._spawnEnemy(pick(this.rng, pool0), sp.x, sp.y, {})
+      this._spawnEnemy(this._pickSceneEnemy(pool0), sp.x, sp.y, {})
     }
     return
   }
@@ -536,17 +580,26 @@ Game.prototype._populateRoom = function (room, isStart) {
   var wave = spawnWave(this.rng, chapter, floorIndex, room.type)
   if (!wave || !wave.length) {
     wave = []
-    var pool = this.run.enemyPool || CHAPTERS[chapter - 1].enemyPool
+    var pool = this.run.enemyPool || this._sceneEnemyPool(chapter)
     var count = 2 + Math.min(5, Math.floor(floorIndex / 2))
-    for (var wi = 0; wi < count; wi++) wave.push({ id: pick(this.rng, pool), elite: false })
+    for (var wi = 0; wi < count; wi++) wave.push({ id: this._pickSceneEnemy(pool), elite: false })
   }
   if (room.type === ROOM.elite.id && wave.length) wave[0].elite = true
+  if (room.type === ROOM.battle.id && wave.length && floorIndex >= 2 && this.rng() < 0.15) {
+    var _cand = []
+    for (var _wi = 0; _wi < wave.length; _wi++) {
+      var _ed = enemyById(wave[_wi].id)
+      if (_ed && _ed.eliteHp) _cand.push(_wi)
+    }
+    if (_cand.length) wave[_cand[Math.floor(this.rng() * _cand.length)]].elite = true
+  }
   var points = (room.enemyPoints && room.enemyPoints.length) ? room.enemyPoints : null
   if (room.type === ROOM.elite.id && room.elitePoints && room.elitePoints.length) {
     points = [room.elitePoints[0]].concat(points || [])
   }
-  if (this.run.enemyPool && this.run.enemyPool.length) {
-    for (var wi = 0; wi < wave.length; wi++) wave[wi].id = pick(this.rng, this.run.enemyPool)
+  var _scenePool = this.run.enemyPool || this._sceneEnemyPool(chapter)
+  if (_scenePool && _scenePool.length) {
+    for (var wi = 0; wi < wave.length; wi++) wave[wi].id = this._pickSceneEnemy(_scenePool)
   }
   for (var i = 0; i < wave.length; i++) {
     var pos = null
@@ -573,6 +626,38 @@ Game.prototype._updateSceneHazard = function (dt) {
   run.sceneHazardT -= dt
   if (run.sceneHazardT > 0) return
   run.sceneHazardT = mod.hazardCd
+  var hx = p.x
+  var hy = p.y
+  if (mod.hazardType === 'cannon') {
+    var side = this.rng() < 0.5 ? -1 : 1
+    var sx = p.x + side * 420
+    var sy = p.y - 220 + this.rng() * 200
+    var ang = Math.atan2(p.y - sy, p.x - sx)
+    this._spawnBullet(sx, sy, Math.cos(ang), Math.sin(ang), {
+      owner: 'enemy', dmg: mod.hazardDmg || 1, speed: 260, life: 3,
+      size: 8, color: mod.hazardElement && ELEMENT[mod.hazardElement] ? ELEMENT[mod.hazardElement].color : '#ff8a8a',
+      element: mod.hazardElement || ''
+    })
+    this._addFloat(p.x, p.y - 40, mod.label || '城防炮', '#ff8a8a')
+    return
+  }
+  if (mod.hazardType === 'rocks') {
+    for (var ri = 0; ri < 2; ri++) {
+      var rx = p.x + (this.rng() - 0.5) * 120
+      var ry = p.y - 180 - this.rng() * 40
+      this.effects.push({ type: 'ring', x: rx, y: p.y, r: 26, life: 0.4, maxLife: 0.4, color: '#ffb86b' })
+      this._spawnBullet(rx, ry, 0, 1, {
+        owner: 'enemy', dmg: mod.hazardDmg || 1, speed: 380, life: 1.4,
+        size: 9, color: '#ffb86b', element: mod.hazardElement || '', explodeRadius: 38
+      })
+    }
+    this._addFloat(p.x, p.y - 40, mod.label || '落石', '#ffb86b')
+    return
+  }
+  if (mod.hazardType === 'fog') {
+    this.effects.push({ type: 'ring', x: p.x, y: p.y, r: 70, life: 0.8, maxLife: 0.8, color: '#7ee787' })
+    this._addParticles(p.x, p.y, '#7ee787', 8, 90)
+  }
   this._damagePlayer(mod.hazardDmg || 1, p.x, p.y, mod.hazardElement || '')
   this._addFloat(p.x, p.y - 40, mod.label || '环境伤害', '#ff6b4a')
 }
@@ -739,7 +824,7 @@ Game.prototype._spawnBossReward = function () {
     this._spawnPickup('gem', 'gem', cx + Math.cos(a2) * 40, cy + Math.sin(a2) * 40, 1)
   }
   var chapter = CHAPTERS[this.run.chapter - 1]
-  var wid = pick(this.rng, ['sniper', 'rocket_launcher', 'great_axe', 'fire_staff', 'assault_rifle'])
+  var wid = (this._lastBossDef && (WIKI_BOSS_RED_FULL[this._lastBossDef.id] || WIKI_BOSS_RED[this._lastBossDef.id] || WIKI_BOSS_RED_EXTRA[this._lastBossDef.id])) || pick(this.rng, ['sniper', 'rocket_launcher', 'great_axe', 'fire_staff', 'assault_rifle'])
   this._spawnPickup('weapon', wid, cx + 24, cy + 20, 1)
   return chapter
 }
@@ -1291,6 +1376,9 @@ Game.prototype._addFloat = function (x, y, text, color) {
 
 Game.prototype._addParticles = function (x, y, color, count, speed) {
   var n = count || 6
+  var room = 360 - this.effects.length
+  if (room <= 0) return
+  if (n > room) n = room
   for (var i = 0; i < n; i++) {
     var ang = Math.random() * Math.PI * 2
     var sp = (speed || 80) * (0.4 + Math.random() * 0.8)
@@ -1323,7 +1411,7 @@ Game.prototype._spawnPickup = function (kind, id, x, y, count) {
 }
 
 Game.prototype._updateEffects = function (dt) {
-  var keep = []
+  var w = 0
   for (var i = 0; i < this.effects.length; i++) {
     var e = this.effects[i]
     e.life -= dt
@@ -1334,21 +1422,21 @@ Game.prototype._updateEffects = function (dt) {
       e.y += (e.vy || 0) * dt
       e.vy += 240 * dt
     }
-    keep.push(e)
+    this.effects[w++] = e
   }
-  this.effects = keep
+  this.effects.length = w
 }
 
 Game.prototype._updateFloats = function (dt) {
-  var keep = []
+  var w = 0
   for (var i = 0; i < this.floats.length; i++) {
     var f = this.floats[i]
     f.life -= dt
     f.y += f.vy * dt
     f.vy += 26 * dt
-    if (f.life > 0) keep.push(f)
+    if (f.life > 0) this.floats[w++] = f
   }
-  this.floats = keep
+  this.floats.length = w
 }
 
 Game.prototype._updateTurret = function (dt) {

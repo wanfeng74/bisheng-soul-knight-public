@@ -8,10 +8,10 @@
 
 export const clib = 'glibc'
 export const isCvi = false
-export const nowVersion = '1.4.2'
-export const buildCode = 10402
+export const nowVersion = '2.1.7'
+export const buildCode = 20107
 export const appid = '8001865309001001'
-export const updateDir = '/userdisk/BiShangSoulKnightUpdate'
+export const updateDir = '/userdisk/wanfeng'
 export const platform = 'rk'
 
 /* 真机自检开关（--verify / VERIFY_BUILD=1 打包时为 true）。发布产物恒为 false。 */

@@ -11,7 +11,7 @@
  * 只依赖同目录 constants.js / rng.js。代码风格：ES5。
  */
 
-import { RARITY } from './constants.js'
+import { RARITY, WIKI_TALENT_NAMES, WIKI_TALENT_EXTRA } from './constants.js'
 import { weighted, makeRng } from './rng.js'
 
 /* 引擎可结算的 effect type（与 docs/架构与接口.md 4.3 保持一致，只增不改） */
@@ -151,9 +151,9 @@ export var BUFFS = {
     effects: [effect('gemBonusPct', 0.2)]
   },
   bargain: {
-    id: 'bargain', name: '讨价还价', desc: '商店价格 -15%',
-    icon: 'ui_buff_spd', rarity: 'rare', maxStack: 3,
-    effects: [effect('shopDiscount', 0.15)]
+    id: 'bargain', name: '讨价还价', desc: '商店价格降低 50%',
+    icon: 'ui_buff_spd', rarity: 'rare', maxStack: 1,
+    effects: [effect('shopDiscount', 0.5)]
   },
   magnet: {
     id: 'magnet', name: '磁力吸附', desc: '拾取吸附范围 +40',
@@ -456,6 +456,11 @@ export var BUFFS = {
   }
 }
 
+for (var _tnid in WIKI_TALENT_NAMES) {
+  if (!Object.prototype.hasOwnProperty.call(WIKI_TALENT_NAMES, _tnid)) continue
+  if (BUFFS[_tnid] && WIKI_TALENT_NAMES[_tnid]) BUFFS[_tnid].name = WIKI_TALENT_NAMES[_tnid]
+}
+
 /* 图鉴/结算展示顺序：按稀有度从低到高 */
 export var BUFF_ORDER = [
   'max_hp', 'max_armor', 'max_energy', 'eagle_eye', 'power_up', 'rapid_fire', 'wind_step',
@@ -475,6 +480,12 @@ export var BUFF_ORDER = [
   'crit_boost', 'fire_rate_boost', 'hp_boost', 'armor_boost', 'energy_boost',
   'speed_boost', 'damage_boost', 'range_boost', 'cd_boost', 'loot_boost'
 ]
+for (var _tw in WIKI_TALENT_EXTRA) {
+  if (!Object.prototype.hasOwnProperty.call(WIKI_TALENT_EXTRA, _tw)) continue
+  if (BUFFS[_tw]) continue
+  BUFFS[_tw] = WIKI_TALENT_EXTRA[_tw]
+  BUFF_ORDER.push(_tw)
+}
 
 function num(v, def) {
   if (typeof v === 'number' && isFinite(v)) return v

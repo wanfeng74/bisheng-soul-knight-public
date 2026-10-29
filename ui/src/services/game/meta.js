@@ -117,8 +117,8 @@ export var ACHIEVEMENTS = {
     kind: 'stat', key: 'revives', target: 5
   },
   all_chars: {
-    id: 'all_chars', name: '八面玲珑', desc: '解锁全部 8 名角色',
-    kind: 'chars', target: 8
+    id: 'all_chars', name: '全员集结', desc: '解锁全部 42 名角色',
+    kind: 'chars', target: 42
   },
   weapon_15: {
     id: 'weapon_15', name: '武器收藏家', desc: '解锁 15 把武器',
@@ -127,6 +127,26 @@ export var ACHIEVEMENTS = {
   chapters_3: {
     id: 'chapters_3', name: '三界行者', desc: '踏足全部三个章节',
     kind: 'chapters', target: 3
+  },
+  chapters_4: {
+    id: 'chapters_4', name: '四境征服者', desc: '踏足全部四个章节',
+    kind: 'chapters', target: 4
+  },
+  floor_20: {
+    id: 'floor_20', name: '深渊终结', desc: '抵达第 20 层',
+    kind: 'floor', target: 20
+  },
+  weapon_100: {
+    id: 'weapon_100', name: '百兵之主', desc: '解锁 100 把武器',
+    kind: 'weapons', target: 100
+  },
+  weapon_300: {
+    id: 'weapon_300', name: '武库总管', desc: '解锁 300 把武器',
+    kind: 'weapons', target: 300
+  },
+  weapon_571: {
+    id: 'weapon_571', name: '维基武库', desc: '解锁全部 571 把 Wiki 武器',
+    kind: 'weapons', target: 571
   }
 }
 
@@ -136,7 +156,8 @@ export var ACHIEVEMENT_ORDER = [
   'kill_50', 'kill_200', 'kill_1000',
   'room_10', 'room_30', 'win_3', 'win_10', 'no_revive_win',
   'rich_1000', 'rich_5000', 'coin_500', 'play_1h',
-  'death_10', 'revive_5', 'all_chars', 'weapon_15', 'chapters_3'
+  'death_10', 'revive_5', 'all_chars', 'weapon_15', 'chapters_3',
+  'chapters_4', 'floor_20', 'weapon_100', 'weapon_300', 'weapon_571'
 ]
 
 /* 升级项定义（与 characters.charStats 的加成一一对应） */

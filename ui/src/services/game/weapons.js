@@ -12,7 +12,7 @@
  * 代码风格：ES5（var / function），会被打进 QuickJS 包。
  */
 
-import { RARITY, RARITY_ORDER, ELEMENT } from './constants.js'
+import { RARITY, RARITY_ORDER, ELEMENT, WIKI_WEAPON_MATCH, WIKI_WEAPON_ALIAS, WIKI_WEAPON_STATS, WIKI_WEAPON_MEDIUM, WIKI_RED_WEAPONS, WIKI_WEAPONS_REMAIN } from './constants.js'
 import { weighted, makeRng } from './rng.js'
 
 var PATTERNS = {
@@ -535,11 +535,47 @@ var RAW = [
 export var WEAPONS = {}
 export var WEAPON_ORDER = []
 
+for (var _rw = 0; _rw < WIKI_RED_WEAPONS.length; _rw++) RAW.push(WIKI_RED_WEAPONS[_rw])
+for (var _rm = 0; _rm < WIKI_WEAPONS_REMAIN.length; _rm++) RAW.push(WIKI_WEAPONS_REMAIN[_rm])
+
 var i
 for (i = 0; i < RAW.length; i++) {
   var built = makeWeapon(RAW[i])
   WEAPONS[built.id] = built
   WEAPON_ORDER.push(built.id)
+}
+for (var _wid in WIKI_WEAPON_MATCH) {
+  if (!Object.prototype.hasOwnProperty.call(WIKI_WEAPON_MATCH, _wid)) continue
+  var _ww = WEAPONS[_wid]
+  var _wd = WIKI_WEAPON_MATCH[_wid]
+  if (!_ww || !_wd) continue
+  if (_wd.name) _ww.name = _wd.name
+  if (_wd.desc) _ww.desc = _wd.desc
+}
+for (var _aid in WIKI_WEAPON_ALIAS) {
+  if (!Object.prototype.hasOwnProperty.call(WIKI_WEAPON_ALIAS, _aid)) continue
+  var _aw = WEAPONS[_aid]
+  var _ad = WIKI_WEAPON_ALIAS[_aid]
+  if (!_aw || !_ad) continue
+  if (_ad.name) _aw.name = _ad.name
+  if (_ad.desc) _aw.desc = _ad.desc
+}
+for (var _mid in WIKI_WEAPON_MEDIUM) {
+  if (!Object.prototype.hasOwnProperty.call(WIKI_WEAPON_MEDIUM, _mid)) continue
+  var _mw = WEAPONS[_mid]
+  var _md = WIKI_WEAPON_MEDIUM[_mid]
+  if (!_mw || !_md) continue
+  if (_md.name) _mw.name = _md.name
+  if (_md.desc) _mw.desc = _md.desc
+}
+for (var _sid in WIKI_WEAPON_STATS) {
+  if (!Object.prototype.hasOwnProperty.call(WIKI_WEAPON_STATS, _sid)) continue
+  var _sw = WEAPONS[_sid]
+  var _sd = WIKI_WEAPON_STATS[_sid]
+  if (!_sw || !_sd) continue
+  if (typeof _sd.dmg === 'number') _sw.dmg = _sd.dmg
+  if (typeof _sd.energy === 'number') _sw.energy = _sd.energy
+  if (typeof _sd.critBonus === 'number') _sw.critBonus = _sd.critBonus
 }
 
 export function weaponById(id) {

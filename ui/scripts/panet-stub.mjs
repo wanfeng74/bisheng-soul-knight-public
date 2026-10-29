@@ -7,3 +7,4 @@
  * 所以这里保持"存在但为空"即可。
  */
 export default null
+export const TwoFinger = null

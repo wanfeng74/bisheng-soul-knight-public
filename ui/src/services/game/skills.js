@@ -37,7 +37,138 @@ export function castSkill(game) {
   if (id === 'shadow_strike') return castShadowStrike(game, p)
   if (id === 'poison_flask') return castPoisonFlask(game, p)
   if (id === 'holy_shield') return castHolyShield(game, p)
+  if (id === 'beam') return castBeam(game, p)
+  if (id === 'nova') return castNova(game, p)
+  if (id === 'transform') return castTransform(game, p)
+  if (id === 'heal') return castHeal(game, p)
+  if (id === 'dash_strike') return castDashStrike(game, p)
+  if (id === 'blackhole') return castBlackhole(game, p)
+  if (id === 'meteor') return castMeteor(game, p)
   return false
+}
+
+/* 通用：黑洞牵引 */
+function castBlackhole(game, p) {
+  var target = nearest(game, 420)
+  var cx = target ? target.x : p.x + p.aimX * 180
+  var cy = target ? target.y : p.y + p.aimY * 180
+  var radius = p.skill.radius || 200
+  game.effects.push({ type: 'ring', x: cx, y: cy, r: radius, life: 0.8, maxLife: 0.8, color: '#b06bff' })
+  for (var i = 0; i < game.enemies.length; i++) {
+    var e = game.enemies[i]
+    if (e.dead) continue
+    var dx = e.x - cx
+    var dy = e.y - cy
+    if (dx * dx + dy * dy > radius * radius) continue
+    e.x -= dx * 0.5
+    e.y -= dy * 0.5
+    game._damageEnemy(e, dmgOf(game, 5), { element: p.skill.element || '', knock: 0, sourceX: cx, sourceY: cy })
+  }
+  game._sfx('skill')
+  return true
+}
+
+/* 通用：陨石 */
+function castMeteor(game, p) {
+  var target = nearest(game, 460)
+  var cx = target ? target.x : p.x + p.aimX * 180
+  var cy = target ? target.y : p.y + p.aimY * 180
+  var count = p.skill.arrows || 4
+  for (var i = 0; i < count; i++) {
+    var mx = cx + (game.rng() - 0.5) * 120
+    var my = cy + (game.rng() - 0.5) * 120
+    game._spawnBullet(mx, my, 0, 0, {
+      owner: 'player', dmg: dmgOf(game, 5), speed: 0, life: 0.5, size: 7,
+      color: '#ffb86b', element: 'fire', explodeRadius: 50
+    })
+  }
+  game._sfx('skill')
+  return true
+}
+
+/* 通用：短时强化/免伤 */
+function castTransform(game, p) {
+  p.invuln = Math.max(p.invuln || 0, 0.5)
+  p.transformT = p.skill.duration || 5
+  game.effects.push({ type: 'ring', x: p.x, y: p.y, r: 60, life: 0.6, maxLife: 0.6, color: '#ffd93d' })
+  game._addParticles(p.x, p.y, '#ffd93d', 16, 160)
+  game._addFloat(p.x, p.y - 36, '强化!', '#ffd93d')
+  game._sfx('skill')
+  return true
+}
+
+/* 通用：治疗/护盾 */
+function castHeal(game, p) {
+  p.hp = Math.min(p.maxHp, p.hp + 2)
+  p.armor = Math.min(p.maxArmor, p.armor + 2)
+  p.energy = Math.min(p.maxEnergy, p.energy + 20)
+  game.effects.push({ type: 'ring', x: p.x, y: p.y, r: 80, life: 0.6, maxLife: 0.6, color: '#7ee787' })
+  game._addFloat(p.x, p.y - 36, '恢复', '#7ee787')
+  game._sfx('skill')
+  return true
+}
+
+/* 通用：翻滚 + 斩击 */
+function castDashStrike(game, p) {
+  var ok = castRoll(game, p)
+  var radius = p.skill.radius || 100
+  for (var i = 0; i < game.enemies.length; i++) {
+    var e = game.enemies[i]
+    if (e.dead) continue
+    var dx = e.x - p.x
+    var dy = e.y - p.y
+    if (dx * dx + dy * dy > radius * radius) continue
+    game._damageEnemy(e, dmgOf(game, 6), { element: p.skill.element || '', knock: 50, sourceX: p.x, sourceY: p.y })
+  }
+  game.effects.push({ type: 'ring', x: p.x, y: p.y, r: radius, life: 0.4, maxLife: 0.4, color: '#a5e887' })
+  game._sfx('skill')
+  return ok || true
+}
+
+/* 通用：直线光束 */
+function castBeam(game, p) {
+  var range = 420
+  var dx = p.aimX || 1
+  var dy = p.aimY || 0
+  var len = Math.sqrt(dx * dx + dy * dy) || 1
+  dx /= len; dy /= len
+  var hx = p.x + dx * range
+  var hy = p.y + dy * range
+  game.effects.push({ type: 'beam', x1: p.x, y1: p.y, x2: hx, y2: hy, color: '#ffe066', life: 0.22, maxLife: 0.22 })
+  for (var i = 0; i < game.enemies.length; i++) {
+    var e = game.enemies[i]
+    if (e.dead) continue
+    var ex = e.x - p.x
+    var ey = e.y - p.y
+    var t = ex * dx + ey * dy
+    if (t < 0 || t > range) continue
+    var px = ex - dx * t
+    var py = ey - dy * t
+    if (px * px + py * py > 26 * 26) continue
+    game._damageEnemy(e, dmgOf(game, 7), { element: (p.skill.element || 'lightning'), knock: 42, sourceX: p.x, sourceY: p.y })
+    game._addParticles(e.x, e.y, '#ffe066', 6, 140)
+  }
+  game.shake = Math.min(8, game.shake + 2)
+  game._sfx('skill')
+  return true
+}
+
+/* 通用：自身范围冲击 */
+function castNova(game, p) {
+  var radius = p.skill.radius || 145
+  game.effects.push({ type: 'ring', x: p.x, y: p.y, r: radius, life: 0.45, maxLife: 0.45, color: '#c86bff' })
+  for (var i = 0; i < game.enemies.length; i++) {
+    var e = game.enemies[i]
+    if (e.dead) continue
+    var dx = e.x - p.x
+    var dy = e.y - p.y
+    if (dx * dx + dy * dy > radius * radius) continue
+    game._damageEnemy(e, dmgOf(game, 6), { element: (p.skill.element || ''), knock: 110, sourceX: p.x, sourceY: p.y })
+  }
+  game._addParticles(p.x, p.y, '#c86bff', 16, 180)
+  game.shake = Math.min(8, game.shake + 3)
+  game._sfx('skill')
+  return true
 }
 
 /* 骑士：双持 6 秒 */

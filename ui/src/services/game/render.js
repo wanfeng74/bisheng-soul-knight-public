@@ -663,10 +663,9 @@ function drawPet(g, ctx) {
   if (!pet || !pet.def) return
   var c = pet.def.color || '#ffd93d'
   shadow(ctx, pet.x, pet.y + 2, 14)
-  pxRect(ctx, pet.x - 8, pet.y - 12, 16, 12, c)
-  pxRect(ctx, pet.x - 6, pet.y - 16, 12, 6, c)
-  pxRect(ctx, pet.x - 5, pet.y - 14, 2, 2, '#1a1a24')
-  pxRect(ctx, pet.x + 3, pet.y - 14, 2, 2, '#1a1a24')
+  drawSprite(ctx, 'pet_' + pet.def.id, pet.x, pet.y + 1, {
+    scale: 1.2, fallbackW: 16, fallbackH: 16, fallbackColor: c
+  })
 }
 
 function drawPlayer(g, ctx) {

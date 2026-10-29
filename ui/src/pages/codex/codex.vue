@@ -6,7 +6,7 @@
         <text class="back-text">返回</text>
       </div>
       <text class="title">图鉴</text>
-      <text class="subtitle">武器 · 敌人 · 成就</text>
+      <text class="subtitle">武器 · 敌人 · 天赋 · 成就</text>
     </div>
     <div class="tab-row">
       <div class="tab-btn" :class="tab === 'weapons' ? 'tab-on' : 'tab-off'" @touchstart="pickTab('weapons')" @click="pickTab('weapons')" @tap="pickTab('weapons')">
@@ -14,6 +14,9 @@
       </div>
       <div class="tab-btn" :class="tab === 'enemies' ? 'tab-on' : 'tab-off'" @touchstart="pickTab('enemies')" @click="pickTab('enemies')" @tap="pickTab('enemies')">
         <text class="tab-text" :style="{ color: tab === 'enemies' ? '#ffd93d' : '#a49fc0' }">敌人 {{ enemies.length }}</text>
+      </div>
+      <div class="tab-btn" :class="tab === 'talents' ? 'tab-on' : 'tab-off'" @touchstart="pickTab('talents')" @click="pickTab('talents')" @tap="pickTab('talents')">
+        <text class="tab-text" :style="{ color: tab === 'talents' ? '#ffd93d' : '#a49fc0' }">天赋 {{ talents.length }}</text>
       </div>
       <div class="tab-btn" :class="tab === 'achievements' ? 'tab-on' : 'tab-off'" @touchstart="pickTab('achievements')" @click="pickTab('achievements')" @tap="pickTab('achievements')">
         <text class="tab-text" :style="{ color: tab === 'achievements' ? '#ffd93d' : '#a49fc0' }">成就 {{ achDone }}/{{ achievements.length }}</text>
@@ -66,6 +69,15 @@
               </div>
             </div>
           </div>
+          <div v-if="tab === 'talents'" class="ach-list">
+            <div v-for="(t, ti) in talents" :key="'talent' + ti" class="ach-row ach-done">
+              <div class="ach-head">
+                <text class="ach-name">{{ t.name }}</text>
+                <text class="ach-state" style="color:#a49fc0">{{ t.group }}</text>
+              </div>
+              <text class="ach-desc">{{ t.desc }}</text>
+            </div>
+          </div>
           <div v-if="tab === 'achievements'" class="ach-list">
             <div v-for="(a, ai) in achievements" :key="a.id" class="ach-row" :class="a.done ? 'ach-done' : 'ach-todo'">
               <div class="ach-head">
@@ -97,9 +109,9 @@
 import { load } from '../../services/save.js'
 import { pageSize } from '../../services/screen.js'
 import { WEAPONS, WEAPON_ORDER } from '../../services/game/weapons.js'
-import { ENEMIES, BOSSES } from '../../services/game/enemies.js'
+import { ENEMIES, WIKI_ENEMIES, BOSSES, WIKI_BOSSES } from '../../services/game/enemies.js'
 import { ACHIEVEMENTS, ACHIEVEMENT_ORDER, progressOf } from '../../services/game/meta.js'
-import { RARITY } from '../../services/game/constants.js'
+import { RARITY, WIKI_TALENT_LIST } from '../../services/game/constants.js'
 
 var CAT_NAMES = {
   gun: '枪械', shotgun: '霰弹', smg: '冲锋', rifle: '步枪', sniper: '狙击',
@@ -126,6 +138,7 @@ export default {
       weapons: [],
       enemies: [],
       bosses: [],
+      talents: [],
       achievements: [],
       achDone: 0,
       scrollerH: 180
@@ -172,6 +185,7 @@ export default {
       this.buildWeapons()
       this.buildEnemies()
       this.buildAchievements()
+      this.talents = WIKI_TALENT_LIST || []
     },
     buildWeapons() {
       var db = this.db || {}
@@ -218,10 +232,11 @@ export default {
     },
     buildEnemies() {
       var list = []
-      if (ENEMIES) {
-        for (var id in ENEMIES) {
-          if (!Object.prototype.hasOwnProperty.call(ENEMIES, id)) continue
-          var e = ENEMIES[id] || {}
+      var src = (WIKI_ENEMIES && Object.keys(WIKI_ENEMIES).length) ? WIKI_ENEMIES : ENEMIES
+      if (src) {
+        for (var id in src) {
+          if (!Object.prototype.hasOwnProperty.call(src, id)) continue
+          var e = src[id] || {}
           var atk = e.attack || {}
           list.push({
             id: id,
@@ -230,23 +245,24 @@ export default {
             hp: (typeof e.hp === 'number') ? e.hp : 0,
             dmg: (typeof atk.dmg === 'number') ? atk.dmg : ((typeof e.dmg === 'number') ? e.dmg : 0),
             chapterText: this.chapterText(e.chapter),
-            icon: 'assets/icons/enemy_' + id + '.png'
+            icon: 'assets/enemies/' + id + '.png'
           })
         }
       }
       this.enemies = list
       var blist = []
-      if (BOSSES) {
-        for (var bid in BOSSES) {
-          if (!Object.prototype.hasOwnProperty.call(BOSSES, bid)) continue
-          var b = BOSSES[bid] || {}
+      var bsrc = (WIKI_BOSSES && Object.keys(WIKI_BOSSES).length) ? WIKI_BOSSES : BOSSES
+      if (bsrc) {
+        for (var bid in bsrc) {
+          if (!Object.prototype.hasOwnProperty.call(bsrc, bid)) continue
+          var b = bsrc[bid] || {}
           blist.push({
             id: bid,
             name: b.name || bid,
             mark: String(b.name || bid).charAt(0),
             hp: (typeof b.hp === 'number') ? b.hp : 0,
             chapterText: this.chapterText(b.chapter),
-            icon: 'assets/icons/boss_' + bid + '.png'
+            icon: 'assets/enemies/' + bid + '.png'
           })
         }
       }

@@ -11,6 +11,8 @@
  * 代码风格：ES5（var / function），会被打进 QuickJS 包。
  */
 
+import { WIKI_CHARACTERS, WIKI_SKILLS, WIKI_SKILL_FORMS, WIKI_SKILL_TUNING2, WIKI_PASSIVE_DESC, WIKI_SKILL_FORM_FIX, WIKI_SKILL_FORM_FIX2 } from './constants.js'
+
 /*
  * 技能冷却为秒数，引擎乘 charStats().skillCdMul（升级减 CD）后使用。
  * 技能 id 与引擎约定固定，不要改。
@@ -535,6 +537,36 @@ for (var _pid in WIKI_CHAR_PASSIVE) {
 }
 
 /* 大厅/角色页展示顺序：按解锁费用从低到高 */
+/* 覆盖为维基 42 角色基础面板/被动/技能名 */
+for (var _cwid in WIKI_CHARACTERS) {
+  if (!Object.prototype.hasOwnProperty.call(WIKI_CHARACTERS, _cwid)) continue
+  var _cw = CHARACTERS[_cwid]
+  var _wd = WIKI_CHARACTERS[_cwid]
+  if (!_cw || !_wd) continue
+  if (typeof _wd.hp === 'number') _cw.hp = _wd.hp
+  if (typeof _wd.armor === 'number') _cw.armor = _wd.armor
+  if (typeof _wd.energy === 'number') _cw.energy = _wd.energy
+  if (typeof _wd.crit === 'number') _cw.crit = _wd.crit
+  if (typeof _wd.hand === 'number') _cw.hand = _wd.hand
+  if (typeof _wd.wikiSpeed === 'number') _cw.wikiSpeed = _wd.wikiSpeed
+  if (_wd.passive) _cw.passive = _wd.passive
+  if (WIKI_PASSIVE_DESC[_cwid]) _cw.passiveDesc = WIKI_PASSIVE_DESC[_cwid]
+  if (_wd.starterName) _cw.starterWeaponName = _wd.starterName
+  if (_wd.skills && _wd.skills.length) _cw.wikiSkills = _wd.skills.slice()
+  if (_cw.skill && _wd.skills && _wd.skills[0]) _cw.skill.name = _wd.skills[0]
+  var _skl = WIKI_SKILLS[_cwid]
+  if (_skl && _skl.length) {
+    _cw.wikiSkillData = _skl.slice()
+    _cw.wikiSkillForms = (WIKI_SKILL_FORM_FIX2[_cwid] || WIKI_SKILL_FORM_FIX[_cwid] || WIKI_SKILL_FORMS[_cwid] || []).slice()
+    _cw.wikiSkillTuning = (WIKI_SKILL_TUNING2[_cwid] || []).slice()
+    if (_cw.skill && _skl[0]) {
+      _cw.skill.name = _skl[0].name || _cw.skill.name
+      if (_skl[0].desc) _cw.skill.desc = _skl[0].desc
+      if (typeof _skl[0].cooldown === 'number') _cw.skill.cd = _skl[0].cooldown
+    }
+  }
+}
+
 export var CHARACTER_ORDER = [
   'knight', 'rogue', 'wizard', 'elf',
   'engineer', 'assassin', 'alchemist', 'paladin',

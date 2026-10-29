@@ -15,6 +15,7 @@
 import PanetModule from 'panet'
 import EricModule from 'Eric'
 import updaterModule from 'updater'
+import { TwoFinger as TwoFingerModule } from 'twofinger'
 export const NATIVE_TARGET = 'rk'
 
 /* 是否组合包（运行期按设备代号动态加载库）。单包恒为 false。 */
@@ -22,7 +23,7 @@ export const MERGE_MODE = false
 
 export const panet = PanetModule || null
 export const ericShell = (EricModule && EricModule.Shell) || null
-export const twoFinger = (updaterModule && updaterModule.twofinger) || null
+export const twoFinger = TwoFingerModule || (updaterModule && updaterModule.twofinger) || null
 export const updater = updaterModule || null
 /* 单包：库在构建期已打包进来，直接返回静态引用。 */
 export function getPanet() { return panet }

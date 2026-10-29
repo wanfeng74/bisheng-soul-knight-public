@@ -3,6 +3,8 @@
  * 美术队友分别写 entities.js / world.js，这里只做合并与兜底。
  */
 import { ENTITY_SPRITES } from './entities.js'
+import { PLAYER_SPRITES_EXTRA } from './player-sprites-extra.js'
+import { PET_SPRITES } from './pets.js'
 import { ENEMY_SPRITES_EXTRA } from './enemies-extra.js'
 import { WEAPON_SPRITES, PICKUP_SPRITES, PROP_SPRITES, UI_SPRITES } from './world.js'
 import { WEAPON_SPRITES_EXTRA } from './weapons-extra.js'
@@ -25,6 +27,8 @@ function mergeInto(dst, src) {
 }
 
 mergeInto(SPRITES, ENTITY_SPRITES)
+mergeInto(SPRITES, PLAYER_SPRITES_EXTRA)
+mergeInto(SPRITES, PET_SPRITES)
 mergeInto(SPRITES, ENEMY_SPRITES_EXTRA)
 mergeInto(SPRITES, WEAPON_SPRITES)
 mergeInto(SPRITES, WEAPON_SPRITES_EXTRA)
